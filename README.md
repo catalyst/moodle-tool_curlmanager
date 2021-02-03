@@ -25,10 +25,10 @@ $CFG->alternative_security_helper = "\tool_curlmanager\tool_curlmanager_curl_sec
 ```
 
 This will allow moodle curl to use an alternative security helper tool_curlmanager_curl_security_helper specified in this plugin
-instead of core plugin helper curl_security_helper.
+instead of core security helper curl_security_helper.
 
 tool_curlmanager_curl_security_helper extends core plugin helper curl_security_helper and override url_is_blocked method in 
-core plugin helper curl_security_helper to allow only specified list hosts/prots to make curl requests.
+core security helper curl_security_helper to allow only specified list hosts/prots to make curl requests.
 
 To configure a list of allow hosts and ports:
 
@@ -49,13 +49,13 @@ Installation
 Checkout or download the plugin source code into folder `admin\tool_curlmanager` of your Moodle installation.
 
 ```sh
-git clone git@github.com:catalyst/moodle-tool_curlmanager.git admin\tool_curlmanager
+git clone git@github.com:catalyst/moodle-tool_curlmanager.git admin\tool\curlmanager
 ```
 or
 ```sh
 wget https://github.com/catalyst/moodle-tool_curlmanager/archive/master.zip
-mkdir -p admin\tool_curlmanager
-unzip master.zip -d admin\tool_curlmanager
+mkdir -p admin\tool\curlmanager
+unzip master.zip -d admin\tool\curlmanager
 ```
 Then go to your Moodle admin interface and complete installation and configuration.
 
