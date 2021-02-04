@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This is an admin_externalpage 'tool_curlmanager_report' for displaying the recorded outbound http requests made by moodle curl reports.
+ * This is an admin_externalpage 'tool_curlmanager_report' for displaying
+ * the recorded outbound http requests made by moodle curl reports.
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -28,7 +29,12 @@ require_once($CFG->libdir.'/adminlib.php');
 
 use \tool_curlmanager\table\tool_curlmanager_report;
 
-admin_externalpage_setup('tool_curlmanager_report', '', null, '', array('pagelayout' => 'report'));
+admin_externalpage_setup('tool_curlmanager_report',
+                        '',
+                        null,
+                        '',
+                        array('pagelayout' => 'report')
+                    );
 
 $download = optional_param('download', '', PARAM_ALPHA);
 

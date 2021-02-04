@@ -1,7 +1,21 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * moodle-tool_curlmanager version.
+ * curlmanager_security_helper
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -18,7 +32,7 @@ class curlmanager_security_helper extends curl_security_helper
 {
 
     /**
-     * url_is_blocked
+     * url_is_blocked.
      * Override parent method url_is_blocked.
      * Inject the curl http request logging.
      *
@@ -27,17 +41,17 @@ class curlmanager_security_helper extends curl_security_helper
      */
     public function url_is_blocked($urlstring) {
 
-        // Log the http request
+        // Log the http request.
         if ($this->log_curl_http_requests($urlstring) === false) {
             return true;
         }
 
-        // Call parent method url_is_blocked
+        // Call parent method url_is_blocked.
         return parent::url_is_blocked($urlstring);
     }
 
     /**
-     * log_curl_http_requests
+     * log_curl_http_requests.
      *
      * @param string $urlstring the URL to check.
      * @return bool true if logged. false if url is invalid.
@@ -70,7 +84,11 @@ class curlmanager_security_helper extends curl_security_helper
         // Check if the host, plugin and codepath exists already.
         // Add a new record if not exist.
         // Otherwise update the reocrd with count+1 and timeupdated field.
-        $record = $DB->get_records('tool_curlmanager', ['host' => $host, 'plugin' => $plugin, 'codepath' => $codepath], '', 'id, count');
+        $record = $DB->get_records('tool_curlmanager',
+                                    ['host' => $host, 'plugin' => $plugin, 'codepath' => $codepath],
+                                    '',
+                                    'id, count'
+                                );
 
         if (count($record) > 0) {
             $record = current($record);
@@ -100,7 +118,7 @@ class curlmanager_security_helper extends curl_security_helper
      * Get plugin name by code path.
      *
      * @param string $codepath
-     * @return string $plugin or bool if plugin not found
+     * @return string $plugin or bool if plugin not found.
      * @throws \dml_exception
      */
     private function getpluginbycodepath(string $codepath) {

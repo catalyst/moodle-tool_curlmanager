@@ -68,7 +68,7 @@ class tool_curlmanager_report extends \table_sql {
             $label = $uri;
         }
         $label = str_replace($CFG->wwwroot, '', $uri);
-        $label = ltrim($label,'/');
+        $label = ltrim($label, '/');
         $label = shorten_text($label, $size, true);
         $label = s($label);
 

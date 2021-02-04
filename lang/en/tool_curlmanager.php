@@ -31,7 +31,7 @@ $string['privacy:metadata'] = 'The tool curl manager plugin contains no user spe
 $string['toolcurlmanagersettings'] = 'Tool curl manager';
 $string['toolcurlmanagereport'] = 'Curl manager report';
 
-// Tool curl manager report header
+// Tool curl manager report header.
 $string['count'] = '#';
 $string['plugin'] = 'Plugin';
 $string['url'] = 'URL';
