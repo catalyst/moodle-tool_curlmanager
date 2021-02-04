@@ -58,7 +58,7 @@ class curlmanager_security_helper extends curl_security_helper
         $codepath = '';
         $trace = debug_backtrace();
         if (isset($trace[3]['file'])) {
-            $codepath = $trace[3]['file'];
+            $codepath = str_replace('/siteroot', '', $trace[3]['file']);
         }
 
         $plugin = $this->getpluginbycodepath($codepath);
@@ -109,7 +109,7 @@ class curlmanager_security_helper extends curl_security_helper
 
         $folders = array_filter(explode("/", $codepath));
         array_pop($folders);
-        array_shift($folders);
+        $folders = array_values($folders);
 
         $numberoffolders = count($folders);
 
@@ -119,23 +119,23 @@ class curlmanager_security_helper extends curl_security_helper
                 $plugins[] = 'core_' .$folders[0];
                 break;
             case 2:
-                $plugins[] = 'core_' .$folders[0];
                 $plugins[] = $folders[0]. '_' . $folders[1];
+                $plugins[] = 'core_' .$folders[0];
                 break;
             case 3:
-                $plugins[] = 'core_' .$folders[0];
                 $plugins[] = $folders[0]. '_' . $folders[1];
                 $plugins[] = $folders[0]. '_' . $folders[2];
                 $plugins[] = $folders[1]. '_' . $folders[2];
+                $plugins[] = 'core_' .$folders[0];
                 break;
             case 4 || 5:
-                $plugins[] = 'core_' .$folders[0];
                 $plugins[] = $folders[0]. '_' . $folders[1];
                 $plugins[] = $folders[0]. '_' . $folders[2];
                 $plugins[] = $folders[0]. '_' . $folders[3];
                 $plugins[] = $folders[1]. '_' . $folders[2];
                 $plugins[] = $folders[1]. '_' . $folders[3];
                 $plugins[] = $folders[2]. '_' . $folders[3];
+                $plugins[] = 'core_' .$folders[0];
                 break;
             default:
                 break;

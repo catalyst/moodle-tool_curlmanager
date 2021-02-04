@@ -38,20 +38,41 @@ require_once($CFG->libdir . '/tablelib.php');
 class tool_curlmanager_report extends \table_sql {
 
     /**
-     * Embeds a link to a drilldown table showing only 1 violation class
+     * Formatting column url that has URLs as links.
      *
-     * @param stdObject $record fieldset object of db table with field timecreated
-     * @return string Link to drilldown table
+     * @param stdObject $record fieldset object of db table with field blockeduri
+     * @return string HTML e.g. <a href="url">url</a>
      */
-    protected function col_failcounter($record) {
-        // Get blocked URI, and set as param for page if clicked on.
-        $url = new \moodle_url('/local/csp/csp_report.php',
-            [
-                'blockeddomain' => $record->blockeddomain,
-                'blockeddirective' => $record->violateddirective
-            ]
-        );
-        return \html_writer::link($url, $record->failcounter);
+    protected function col_url($record) {
+        return $this->format_uri($record->url);
+    }
+
+    /**
+     * Format a uri
+     *
+     * @param string $uri Unsafe uri data
+     * @param string $label The label for the URL
+     * @param int $size How many chars to show
+     * @return string HTML e.g. <a href="documenturi">documenturi</a>
+     */
+    private function format_uri($uri, $label = '', $size = 40) {
+        global $CFG;
+        if (!$uri) {
+            return '-';
+        }
+        if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
+            return s($uri);
+        }
+
+        if (empty($label)) {
+            $label = $uri;
+        }
+        $label = str_replace($CFG->wwwroot, '', $uri);
+        $label = ltrim($label,'/');
+        $label = shorten_text($label, $size, true);
+        $label = s($label);
+
+        return \html_writer::link($uri, $label);
     }
 
     /**
@@ -84,17 +105,5 @@ class tool_curlmanager_report extends \table_sql {
         } else {
             return  '-';
         }
-    }
-
-    /**
-     * Draw a link to the original table report URI with a param instructing to download the record.
-     *
-     * @param stdObject $record
-     * @return string HTML link.
-     */
-    protected function col_download($record)
-    {
-        global $OUTPUT;
-
     }
 }

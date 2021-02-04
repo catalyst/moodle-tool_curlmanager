@@ -50,9 +50,8 @@ if (!$table->is_downloading()) {
 
 $count = get_string('count', 'tool_curlmanager');
 $plugin = get_string('plugin', 'tool_curlmanager');
-$codepath = get_string('codepath', 'tool_curlmanager');
-$url = get_string('url', 'tool_curlmanager');
-$host = get_string('host', 'tool_curlmanager');
+$domain = get_string('url', 'tool_curlmanager');
+$path = get_string('codepath', 'tool_curlmanager');
 $timecreated = get_string('timecreated', 'tool_curlmanager');
 $timeupdated = get_string('timeupdated', 'tool_curlmanager');
 $download = get_string('download', 'tool_curlmanager');
@@ -63,9 +62,8 @@ $table->set_attribute('class', 'generaltable generalbox table-sm');
 $table->define_columns(array(
     'count',
     'plugin',
-    'codepath',
     'url',
-    'host',
+    'codepath',
     'timecreated',
     'timeupdated',
 ));
@@ -73,14 +71,13 @@ $table->no_sorting('download');
 $table->define_headers(array(
     $count,
     $plugin,
-    $codepath,
-    $url,
-    $host,
+    $domain,
+    $path,
     $timecreated,
     $timeupdated,
 ));
 
-$fields = 'id, count, plugin, codepath, url, host, timecreated, timeupdated';
+$fields = 'id, count, plugin, url, codepath, timecreated, timeupdated';
 $from = "mdl_tool_curlmanager";
 $where = '1 = 1';
 $params = array();

@@ -34,9 +34,8 @@ $string['toolcurlmanagereport'] = 'Curl manager report';
 // Tool curl manager report header
 $string['count'] = '#';
 $string['plugin'] = 'Plugin';
-$string['codepath'] = 'Code Path';
-$string['url'] = 'URL';
-$string['host'] = 'Host';
+$string['url'] = 'Domain';
+$string['codepath'] = 'Path';
 $string['timecreated'] = 'Time Created';
 $string['timeupdated'] = 'Time Updated';
 $string['download'] = 'Download';
