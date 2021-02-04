@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This is an admin_externalpage 'curlmanager_report' for displaying
- * the recorded outbound http requests made by moodle curl reports.
+ * This is an admin_externalpage 'curlmanager_domain_report' for displaying
+ * the recorded outbound http requests made by moodle curl reports - aggregate by domain.
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -27,26 +27,19 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
-use \tool_curlmanager\table\report;
+use \tool_curlmanager\table\domain_report;
 
-admin_externalpage_setup('curlmanager_report',
-                        '',
-                        null,
-                        '',
-                        array('pagelayout' => 'report')
-                    );
-
-$viewdomain = optional_param('domain', false, PARAM_TEXT);
+admin_externalpage_setup('curlmanager_domain_report', '', null, '', array('pagelayout' => 'report'));
 
 $download = optional_param('download', '', PARAM_ALPHA);
 
-$table = new report('curlmanagerreportstable');
+$table = new domain_report('curlmanagerdomainreportstable');
 
-$table->is_downloading($download, 'curlmanagerreport', 'curlmanagerreport');
+$table->is_downloading($download, 'curlmanagerdomainreport', 'curlmanagerdomainreport');
 
 global $OUTPUT, $DB;
 
-$title = get_string('curlmanagerreport', 'tool_curlmanager');
+$title = get_string('curlmanagerdomainreport', 'tool_curlmanager');
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('admin');
@@ -56,44 +49,29 @@ if (!$table->is_downloading()) {
     echo $OUTPUT->heading($title);
 }
 
-$count = get_string('count', 'tool_curlmanager');
-$plugin = get_string('plugin', 'tool_curlmanager');
-$url = get_string('url', 'tool_curlmanager');
-$path = get_string('codepath', 'tool_curlmanager');
-$timecreated = get_string('timecreated', 'tool_curlmanager');
-$timeupdated = get_string('timeupdated', 'tool_curlmanager');
+$sum = get_string('sum', 'tool_curlmanager');
+$host = get_string('host', 'tool_curlmanager');
 $download = get_string('download', 'tool_curlmanager');
 
 $table->define_baseurl($PAGE->url);
-$table->sortable(true, 'count', SORT_DESC);
+$table->sortable(true, 'hostcount', SORT_DESC);
 $table->set_attribute('class', 'generaltable generalbox table-sm');
 $table->define_columns([
-    'count',
-    'plugin',
-    'url',
-    'codepath',
-    'timecreated',
-    'timeupdated'
+    'hostcount',
+    'host'
 ]);
 $table->no_sorting('download');
 $table->define_headers([
-    $count,
-    $plugin,
-    $url,
-    $path,
-    $timecreated,
-    $timeupdated
+    $sum,
+    $host
 ]);
 
-$fields = 'id, count, plugin, url, codepath, timecreated, timeupdated';
-$from = "mdl_tool_curlmanager";
-if ($viewdomain) {
-    $where = "host = ?";
-    $params = [$viewdomain];
-} else {
-    $where = '1 = 1';
-    $params = [];
-}
+$fields = 'hostcount, host';
+$from = "(SELECT sum(count) AS hostcount, host
+          FROM {tool_curlmanager}
+          GROUP BY host) AS A";
+$where = '1 = 1';
+$params = [];
 
 $table->set_sql($fields, $from, $where, $params);
 $table->out(30, true);

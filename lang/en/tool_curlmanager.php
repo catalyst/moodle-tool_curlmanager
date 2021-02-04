@@ -25,13 +25,15 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Tool curl manager';
+$string['pluginname'] = 'Curl manager';
 $string['privacy:metadata'] = 'The tool curl manager plugin contains no user specific data.';
 
-$string['toolcurlmanagersettings'] = 'Tool curl manager';
-$string['toolcurlmanagereport'] = 'Curl manager report';
+// Settings.
+$string['curlmanagersettings'] = 'Curl manager settings';
+$string['curlmanagerreport'] = 'Curl manager report';
+$string['curlmanagerdomainreport'] = 'Curl manager domain report';
 
-// Tool curl manager report header.
+// Curl manager report header.
 $string['count'] = '#';
 $string['plugin'] = 'Plugin';
 $string['url'] = 'URL';
@@ -39,3 +41,7 @@ $string['codepath'] = 'Path';
 $string['timecreated'] = 'Time Created';
 $string['timeupdated'] = 'Time Updated';
 $string['download'] = 'Download';
+
+// Curl manager domain report header.
+$string['sum'] = '#';
+$string['host'] = 'Domain';

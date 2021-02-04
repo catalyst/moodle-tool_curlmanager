@@ -25,6 +25,7 @@
 namespace tool_curlmanager;
 
 use \core\files\curl_security_helper;
+use core_component;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -60,7 +61,7 @@ class curlmanager_security_helper extends curl_security_helper
 
         global $DB;
 
-         // Try to parse the URL to get the 'host' and 'port' components.
+        // Try to parse the URL to get the 'host' and 'port' components.
         try {
             $url = new \moodle_url($urlstring);
             $host = $url->get_host();
@@ -70,12 +71,14 @@ class curlmanager_security_helper extends curl_security_helper
         }
 
         $codepath = '';
+        $rootcodepath = '';
         $trace = debug_backtrace();
         if (isset($trace[3]['file'])) {
+            $rootcodepath = $trace[3]['file'];
             $codepath = str_replace('/siteroot', '', $trace[3]['file']);
         }
 
-        $plugin = $this->getpluginbycodepath($codepath);
+        $plugin = $this->getcomponentbycodepath($rootcodepath);
         if ($plugin === false) {
             $plugin = '';
         }
@@ -107,6 +110,7 @@ class curlmanager_security_helper extends curl_security_helper
             $data->host = $host;
             $data->count = 1;
             $data->timecreated = time();
+            $data->timeupdated = time();
 
             $DB->insert_record('tool_curlmanager', $data);
         }
@@ -115,55 +119,25 @@ class curlmanager_security_helper extends curl_security_helper
     }
 
     /**
-     * Get plugin name by code path.
+     * Get component name by code path.
      *
      * @param string $codepath
-     * @return string $plugin or bool if plugin not found.
+     * @return string $component or bool if component not found.
      * @throws \dml_exception
      */
-    private function getpluginbycodepath(string $codepath) {
+    private function getcomponentbycodepath(string $codepath) {
 
-        global $DB;
+        // Remove the file name from code path.
+        $codepath = dirname($codepath);
 
-        $folders = array_filter(explode("/", $codepath));
-        array_pop($folders);
-        $folders = array_values($folders);
+        $componentinfo = core_component::get_component_list();
 
-        $numberoffolders = count($folders);
+        foreach ($componentinfo as $components) {
 
-        $plugins = [];
-        switch ($numberoffolders) {
-            case 1:
-                $plugins[] = 'core_' .$folders[0];
-                break;
-            case 2:
-                $plugins[] = $folders[0]. '_' . $folders[1];
-                $plugins[] = 'core_' .$folders[0];
-                break;
-            case 3:
-                $plugins[] = $folders[0]. '_' . $folders[1];
-                $plugins[] = $folders[0]. '_' . $folders[2];
-                $plugins[] = $folders[1]. '_' . $folders[2];
-                $plugins[] = 'core_' .$folders[0];
-                break;
-            case 4 || 5:
-                $plugins[] = $folders[0]. '_' . $folders[1];
-                $plugins[] = $folders[0]. '_' . $folders[2];
-                $plugins[] = $folders[0]. '_' . $folders[3];
-                $plugins[] = $folders[1]. '_' . $folders[2];
-                $plugins[] = $folders[1]. '_' . $folders[3];
-                $plugins[] = $folders[2]. '_' . $folders[3];
-                $plugins[] = 'core_' .$folders[0];
-                break;
-            default:
-                break;
-        }
-
-        // This definitely add overhead to curl request.
-        // However if doesn't exits, will not return correct plugin.
-        foreach ($plugins as $plugin) {
-            if ($DB->record_exists('config_plugins', ['plugin' => $plugin])) {
-                return $plugin;
+            foreach ($components as $componentname => $componentpath) {
+                if (strstr($codepath, $componentpath)) {
+                    return $componentname;
+                }
             }
         }
 
