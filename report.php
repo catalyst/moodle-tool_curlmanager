@@ -50,7 +50,7 @@ if (!$table->is_downloading()) {
 
 $count = get_string('count', 'tool_curlmanager');
 $plugin = get_string('plugin', 'tool_curlmanager');
-$domain = get_string('url', 'tool_curlmanager');
+$url = get_string('url', 'tool_curlmanager');
 $path = get_string('codepath', 'tool_curlmanager');
 $timecreated = get_string('timecreated', 'tool_curlmanager');
 $timeupdated = get_string('timeupdated', 'tool_curlmanager');
@@ -71,7 +71,7 @@ $table->no_sorting('download');
 $table->define_headers(array(
     $count,
     $plugin,
-    $domain,
+    $url,
     $path,
     $timecreated,
     $timeupdated,

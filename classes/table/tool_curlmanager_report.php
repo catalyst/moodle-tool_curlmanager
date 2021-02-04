@@ -55,7 +55,7 @@ class tool_curlmanager_report extends \table_sql {
      * @param int $size How many chars to show
      * @return string HTML e.g. <a href="documenturi">documenturi</a>
      */
-    private function format_uri($uri, $label = '', $size = 40) {
+    private function format_uri($uri, $label = '', $size = 80) {
         global $CFG;
         if (!$uri) {
             return '-';
