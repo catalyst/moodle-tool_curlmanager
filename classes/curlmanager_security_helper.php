@@ -28,7 +28,9 @@ class curlmanager_security_helper extends curl_security_helper
     public function url_is_blocked($urlstring) {
 
         // Log the http request
-        $this->log_outbound_http_requests($urlstring);
+        if ($this->log_curl_http_requests($urlstring) === false) {
+            return true;
+        }
 
         // Call parent method url_is_blocked
         return parent::url_is_blocked($urlstring);
@@ -38,9 +40,9 @@ class curlmanager_security_helper extends curl_security_helper
      * log_curl_http_requests
      *
      * @param string $urlstring the URL to check.
-     * @return bool true if the URL is blacklisted or invalid and false if the URL is not blacklisted.
+     * @return bool true if logged. false if url is invalid.
      */
-    private function log_curl_http_requests($urlstring) {
+    private function log_curl_http_requests($urlstring) : bool {
 
         global $DB;
 
@@ -90,6 +92,8 @@ class curlmanager_security_helper extends curl_security_helper
 
             $DB->insert_record('tool_curlmanager', $data);
         }
+
+        return true;
     }
 
     /**
