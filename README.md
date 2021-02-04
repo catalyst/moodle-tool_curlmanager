@@ -21,13 +21,13 @@ How does it work?
 Configure in config.php:
 
 ```
-$CFG->alternative_security_helper = "\tool_curlmanager\tool_curlmanager_curl_security_helper";
+$CFG->alternative_security_helper = "\tool_curlmanager\curlmanager_security_helper";
 ```
 
 This will allow moodle curl to use an alternative security helper tool_curlmanager_curl_security_helper specified in this plugin
 instead of core security helper curl_security_helper.
 
-tool_curlmanager_curl_security_helper extends core plugin helper curl_security_helper and override url_is_blocked method in 
+curlmanager_security_helper extends core plugin helper curl_security_helper and override url_is_blocked method in 
 core security helper curl_security_helper to allow only specified list hosts/prots to make curl requests.
 
 To configure a list of allow hosts and ports:
