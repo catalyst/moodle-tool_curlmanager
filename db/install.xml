@@ -11,6 +11,7 @@
         <FIELD NAME="codepath" TYPE="char" LENGTH="500" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="url" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="host" TYPE="char" LENGTH="200" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="count" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="timeupdated" TYPE="int" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
@@ -20,6 +21,7 @@
       <INDEXES>
         <INDEX NAME="mdl_tool_curlmanager_plugin" UNIQUE="false" FIELDS="plugin" COMMENT="To help searching for records."/>
         <INDEX NAME="mdl_tool_curlmanager_host" UNIQUE="false" FIELDS="host" COMMENT="To help searching for records."/>
+        <INDEX NAME="mdl_tool_curlmanager_count" UNIQUE="false" FIELDS="count" COMMENT="To help searching for records."/>
       </INDEXES>
     </TABLE>
   </TABLES>
