@@ -35,12 +35,12 @@ class curlmanager_security_helper extends curl_security_helper
     }
 
     /**
-     * log_culr_http_requests
+     * log_curl_http_requests
      *
      * @param string $urlstring the URL to check.
      * @return bool true if the URL is blacklisted or invalid and false if the URL is not blacklisted.
      */
-    private function log_culr_http_requests($urlstring) {
+    private function log_curl_http_requests($urlstring) {
 
         global $DB;
 
