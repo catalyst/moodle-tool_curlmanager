@@ -42,7 +42,7 @@ Branches
 
 | Moodle verion     | Branch      | PHP       |
 | ----------------- | ----------- | --------  |
-| Moodle 2.7 to 3.7 | master      | 5.5 - 7.2 |
+| Moodle 2.7 to 3.9 | master      | 5.5 - 7.4 |
 
 Installation
 ------------
