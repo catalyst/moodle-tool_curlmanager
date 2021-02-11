@@ -30,12 +30,12 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/tablelib.php');
 
 /**
- * Class tool_curlmanager_report implements processing of columns
+ * Class report implements processing of columns
  *
  * - Convert unix timestamp columns to human time.
  * - Adds a button to download a record.
  */
-class tool_curlmanager_report extends \table_sql {
+class report extends \table_sql {
 
     /**
      * Formatting column url that has URLs as links.
@@ -68,7 +68,7 @@ class tool_curlmanager_report extends \table_sql {
             $label = $uri;
         }
         $label = str_replace($CFG->wwwroot, '', $uri);
-        $label = ltrim($label,'/');
+        $label = ltrim($label, '/');
         $label = shorten_text($label, $size, true);
         $label = s($label);
 

@@ -26,14 +26,34 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-    $ADMIN->add('localplugins', new admin_category('tool_curlmanager', get_string('pluginname', 'tool_curlmanager')));
+    $ADMIN->add('tools', new admin_category('tool_curlmanager', get_string('pluginname', 'tool_curlmanager')));
 
-    $settings = new admin_settingpage('tool_curlmanager_settings', get_string('toolcurlmanagersettings', 'tool_curlmanager'));
+    $settings = new admin_settingpage('curlmanager_settings', get_string('curlmanagersettings', 'tool_curlmanager'));
     $ADMIN->add('tool_curlmanager', $settings);
 
-    $ADMIN->add('reports',
-        new admin_externalpage('tool_curlmanager_report',
-            get_string('toolcurlmanagereport', 'tool_curlmanager'),
-            new moodle_url('/admin/tool/curlmanager/report.php')
-        ));
+    if (file_exists($CFG->dirroot . '/totara')) {
+        $ADMIN->add('tool_curlmanager',
+            new admin_externalpage('curlmanager_report',
+                get_string('curlmanagerreport', 'tool_curlmanager'),
+                new moodle_url('/admin/tool/curlmanager/report.php')
+            ));
+
+        $ADMIN->add('tool_curlmanager',
+            new admin_externalpage('curlmanager_domain_report',
+                get_string('curlmanagerdomainreport', 'tool_curlmanager'),
+                new moodle_url('/admin/tool/curlmanager/domain_report.php')
+            ));
+    } else {
+        $ADMIN->add('reports',
+            new admin_externalpage('curlmanager_report',
+                get_string('curlmanagerreport', 'tool_curlmanager'),
+                new moodle_url('/admin/tool/curlmanager/report.php')
+            ));
+
+        $ADMIN->add('reports',
+            new admin_externalpage('curlmanager_domain_report',
+                get_string('curlmanagerdomainreport', 'tool_curlmanager'),
+                new moodle_url('/admin/tool/curlmanager/domain_report.php')
+            ));
+    }
 }

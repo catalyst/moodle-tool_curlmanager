@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * moodle-tool_curlmanager version.
+ * tool_curlmanager table
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -23,9 +23,33 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace tool_curlmanager\table;
+
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2021020500;
-$plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'tool_curlmanager';
+require_once($CFG->libdir . '/tablelib.php');
+
+/**
+ * Class domain_report implements processing of columns
+ *
+ * - Convert unix timestamp columns to human time.
+ * - Adds a button to download a record.
+ */
+class domain_report extends \table_sql {
+
+    /**
+     * Formatting column hostcount to link back to report table search by host.
+     *
+     * @param stdObject $record fieldset object of db table with field blockeduri
+     * @return string HTML e.g. <a href="url">url</a>
+     */
+    protected function col_hostcount($record) {
+        // Get blocked URI, and set as param for page if clicked on.
+        $url = new \moodle_url('/admin/tool/curlmanager/report.php',
+            [
+                'domain' => $record->host,
+            ]
+        );
+        return \html_writer::link($url, $record->hostcount);
+    }
+}
