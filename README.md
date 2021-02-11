@@ -9,21 +9,18 @@
 
 What is this?
 -------------
-Curl Manger - Alternative security helper
 
-This plugin logs all the outbound http requests made by moodle curl lib (new curl()) and produce a report (Curl Manager Report) based on the log.
-
-In addition, this alternative security helper will allow only curl requests on list of hosts/ports specified in the config.
+Moodle comes with a built in 'security helper' which is what enforces the $CFG->curlsecurityblockedhosts are related settings. This plugin augments this existing security helper and adds additional features such as reporting on what urls are being curled to help inform policy decisions.
 
 How does it work?
 -----------------
 
-Moodle comes with a built in 'security helper' which is what enforces the $CFG->curlsecurityblockedhosts setting. This plugin augments this existing security helper and adds additional features such as reporting on what urls are being curled to help inform policy decisions.
-
 This relies on backporting this tracker:
 
+Curl Manger - Alternative security helper
 https://https://tracker.moodle.org/browse/MDL-70649
 
+In config.php specify the replacement security helper class:
 
 ```
 $CFG->alternative_security_helper = "\tool_curlmanager\curlmanager_security_helper";
