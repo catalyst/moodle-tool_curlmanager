@@ -69,7 +69,7 @@ See also:
 
 Tracker: Allow an alternate curl security helper
 
-https://https://tracker.moodle.org/browse/MDL-70649
+https://tracker.moodle.org/browse/MDL-70649
 
 This plugin was developed by Catalyst IT Australia:
 
