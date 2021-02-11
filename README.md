@@ -18,7 +18,12 @@ In addition, this alternative security helper will allow only curl requests on l
 How does it work?
 -----------------
 
-Configure in config.php:
+Moodle comes with a built in 'security helper' which is what enforces the $CFG->curlsecurityblockedhosts setting. This plugin augments this existing security helper and adds additional features such as reporting on what urls are being curled to help inform policy decisions.
+
+This relies on backporting this tracker:
+
+https://https://tracker.moodle.org/browse/MDL-70649
+
 
 ```
 $CFG->alternative_security_helper = "\tool_curlmanager\curlmanager_security_helper";
@@ -40,9 +45,10 @@ $CFG->curlsecurityallowedport
 Branches
 --------
 
-| Moodle verion     | Branch      | PHP       |
-| ----------------- | ----------- | --------  |
-| Moodle 2.7 to 3.9 | master      | 5.5 - 7.4 |
+| Moodle verion     | Branch      | PHP       | Backports |
+| ----------------- | ----------- | --------  | ----------|
+| Moodle 2.7 to 3.9 | master      | 5.5 - 7.4 | MDL-70649 |
+
 
 Installation
 ------------
@@ -65,13 +71,11 @@ References
 See also:
 
 Tracker: Allow an alternate curl security helper
-```
+
 https://https://tracker.moodle.org/browse/MDL-70649
-```
 
 This plugin was developed by Catalyst IT Australia:
-```
+
 https://www.catalyst-au.net/
-```
 
 <img alt="Catalyst IT" src="https://cdn.rawgit.com/CatalystIT-AU/moodle-auth_saml2/master/pix/catalyst-logo.svg" width="400">
