@@ -22,7 +22,7 @@ https://https://tracker.moodle.org/browse/MDL-70649
 
 In config.php specify the replacement security helper class:
 
-```
+```php
 $CFG->alternative_security_helper = "\tool_curlmanager\curlmanager_security_helper";
 ```
 
@@ -34,7 +34,7 @@ core security helper curl_security_helper to allow only specified list hosts/pro
 
 To configure a list of allow hosts and ports:
 
-```
+```php
 $CFG->curlsecurityallowedhosts
 $CFG->curlsecurityallowedport
 ```
