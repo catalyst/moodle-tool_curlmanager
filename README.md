@@ -18,7 +18,7 @@ How does it work?
 This relies on backporting this tracker:
 
 Curl Manger - Alternative security helper
-https://https://tracker.moodle.org/browse/MDL-70649
+https://tracker.moodle.org/browse/MDL-70649
 
 In config.php specify the replacement security helper class:
 
