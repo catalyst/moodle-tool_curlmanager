@@ -42,10 +42,11 @@ $CFG->curlsecurityallowedport
 Branches
 --------
 
-| Moodle verion     | Branch      | PHP       | Backports |
-| ----------------- | ----------- | --------  | ----------|
-| Moodle 2.7 to 3.9 | master      | 5.5 - 7.4 | MDL-70649 |
-
+| Moodle verion     |  Totara version          | Branch      | PHP        | Backports  |
+| ----------------- | ------------------------ |------------ | ---------  | -----------|
+| 3.9               |                          | VERSION1    | 7.4+       | MDL-70649  |
+|                   |  12                      | VERSION1    | 7.0+       | MDL-70649  |
+|                   |  9 - 11                  | VERSION1    | 5.5+       | MDL-70649  |
 
 Installation
 ------------
@@ -56,9 +57,9 @@ git clone git@github.com:catalyst/moodle-tool_curlmanager.git admin\tool\curlman
 ```
 or
 ```sh
-wget https://github.com/catalyst/moodle-tool_curlmanager/archive/master.zip
+wget https://github.com/catalyst/moodle-tool_curlmanager/archive/VERSION1.zip
 mkdir -p admin\tool\curlmanager
-unzip master.zip -d admin\tool\curlmanager
+unzip VERSION1.zip -d admin\tool\curlmanager
 ```
 Then go to your Moodle admin interface and complete installation and configuration.
 
