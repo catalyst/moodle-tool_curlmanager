@@ -76,6 +76,34 @@ class report extends \table_sql {
     }
 
     /**
+     * Format url allowed column.
+     *
+     * @param $record
+     * @return string
+     */
+    protected function col_urlallowed($record) {
+        if ((int)$record->urlallowed === 1) {
+            return get_string('yes', 'tool_curlmanager');
+        } else {
+            return get_string('no', 'tool_curlmanager');
+        }
+    }
+
+    /**
+     * Format url blcoked column.
+     *
+     * @param $record
+     * @return string
+     */
+    protected function col_urlblocked($record) {
+        if ((int)$record->urlblocked === 1) {
+            return get_string('yes', 'tool_curlmanager');
+        } else {
+            return get_string('no', 'tool_curlmanager');
+        }
+    }
+
+    /**
      * Formatting unix timestamps in column named timecreated to human readable time.
      *
      * @param stdObject $record fieldset object of db table with field timecreated

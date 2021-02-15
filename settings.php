@@ -31,6 +31,17 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('curlmanager_settings', get_string('curlmanagersettings', 'tool_curlmanager'));
     $ADMIN->add('tool_curlmanager', $settings);
 
+    $heading = new lang_string('settings:general', 'tool_curlmanager');
+    $settings->add(new admin_setting_heading('tool_curlmanager/settings', $heading, ''));
+
+    $name = new lang_string('settings:enabled', 'tool_curlmanager');
+    $description = new lang_string('settings:enabled_description', 'tool_curlmanager');
+    $settings->add(new admin_setting_configcheckbox('tool_curlmanager/enabled', $name, '', false));
+
+    $name = new lang_string('settings:allowedhosts', 'tool_curlmanager');
+    $description = new lang_string('settings:allowedhosts_description', 'tool_curlmanager');
+    $settings->add(new admin_setting_configtextarea('tool_curlmanager/allowedhosts', $name, $description, '', PARAM_TEXT));
+
     if (file_exists($CFG->dirroot . '/totara')) {
         $ADMIN->add('tool_curlmanager',
             new admin_externalpage('curlmanager_report',
