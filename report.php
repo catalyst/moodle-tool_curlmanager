@@ -60,6 +60,8 @@ $count = get_string('count', 'tool_curlmanager');
 $plugin = get_string('plugin', 'tool_curlmanager');
 $url = get_string('url', 'tool_curlmanager');
 $path = get_string('codepath', 'tool_curlmanager');
+$urlallowed = get_string('urlallowed', 'tool_curlmanager');
+$urlblocked = get_string('urlblocked', 'tool_curlmanager');
 $timecreated = get_string('timecreated', 'tool_curlmanager');
 $timeupdated = get_string('timeupdated', 'tool_curlmanager');
 $download = get_string('download', 'tool_curlmanager');
@@ -72,6 +74,8 @@ $table->define_columns([
     'plugin',
     'url',
     'codepath',
+    'urlallowed',
+    'urlblocked',
     'timecreated',
     'timeupdated'
 ]);
@@ -81,11 +85,13 @@ $table->define_headers([
     $plugin,
     $url,
     $path,
+    $urlallowed,
+    $urlblocked,
     $timecreated,
     $timeupdated
 ]);
 
-$fields = 'id, count, plugin, url, codepath, timecreated, timeupdated';
+$fields = 'id, count, plugin, url, codepath, urlallowed, urlblocked, timecreated, timeupdated';
 $from = "mdl_tool_curlmanager";
 if ($viewdomain) {
     $where = "host = ?";

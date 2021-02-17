@@ -32,15 +32,24 @@ $string['privacy:metadata'] = 'The tool curl manager plugin contains no user spe
 $string['curlmanagersettings'] = 'Curl manager settings';
 $string['curlmanagerreport'] = 'Curl manager report';
 $string['curlmanagerdomainreport'] = 'Curl manager domain report';
+$string['settings:general'] = 'General curl manager settings';
+$string['settings:enabled'] = 'Allowed hosts enabled';
+$string['settings:enabled_description'] = '';
+$string['settings:allowedhosts'] = 'List of allowed hosts';
+$string['settings:allowedhosts_description'] = 'Please specify one allowed host only for each line.';
 
 // Curl manager report header.
 $string['count'] = '#';
 $string['plugin'] = 'Plugin';
 $string['url'] = 'URL';
 $string['codepath'] = 'Path';
+$string['urlallowed'] = "URL Allowed";
+$string['urlblocked'] = "URL Blocked";
 $string['timecreated'] = 'Time Created';
 $string['timeupdated'] = 'Time Updated';
 $string['download'] = 'Download';
+$string['yes'] = 'Yes';
+$string['no'] = 'No';
 
 // Curl manager domain report header.
 $string['sum'] = '#';
