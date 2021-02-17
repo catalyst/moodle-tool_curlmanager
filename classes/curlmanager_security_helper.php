@@ -26,7 +26,6 @@ namespace tool_curlmanager;
 
 use core\files\curl_security_helper_base;
 use core\files\curl_security_helper;
-use core_component;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -185,7 +184,7 @@ class curlmanager_security_helper extends curl_security_helper_base
         // Remove the file name from code path.
         $codepath = dirname($codepath);
 
-        $componentinfo = core_component::get_component_list();
+        $componentinfo = helper::get_component_list();
 
         foreach ($componentinfo as $components) {
 
