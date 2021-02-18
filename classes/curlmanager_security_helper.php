@@ -181,6 +181,10 @@ class curlmanager_security_helper extends curl_security_helper_base
      */
     private function getcomponentbycodepath(string $codepath) {
 
+        if (empty($codepath)) {
+            return false;
+        }
+
         // Remove the file name from code path.
         $codepath = dirname($codepath);
 
@@ -189,7 +193,7 @@ class curlmanager_security_helper extends curl_security_helper_base
         foreach ($componentinfo as $components) {
 
             foreach ($components as $componentname => $componentpath) {
-                if (strstr($codepath, $componentpath)) {
+                if (!empty($componentpath) && strstr($codepath, $componentpath)) {
                     return $componentname;
                 }
             }
