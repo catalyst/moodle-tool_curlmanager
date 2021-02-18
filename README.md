@@ -2,6 +2,7 @@
 
 * [What is this?](#what-is-this)
 * [How does it work?](#how-does-it-work)
+* [What does it do?](#what-does-it-do)
 * [Branches](#branches)
 * [Installation](#installation)
 * [References](#references)
@@ -10,34 +11,36 @@
 What is this?
 -------------
 
-Moodle comes with a built in 'security helper' which is what enforces the $CFG->curlsecurityblockedhosts are related settings. This plugin augments this existing security helper and adds additional features such as reporting on what urls are being curled to help inform policy decisions.
+Moodle comes with a built in 'security helper' which is what enforces the $CFG->curlsecurityblockedhosts and related settings. This plugin augments this existing security helper and adds additional features such as reporting on what urls are being curled to help inform policy decisions.
+
 
 How does it work?
 -----------------
 
 This relies on backporting this tracker:
 
-Curl Manger - Alternative security helper
+Allow plugins to augment the curl security helper via callback
+```
 https://tracker.moodle.org/browse/MDL-70649
-
-In config.php specify the replacement security helper class:
-
-```php
-$CFG->alternative_security_helper = "\tool_curlmanager\curlmanager_security_helper";
 ```
 
-This will allow moodle curl to use an alternative security helper tool_curlmanager_curl_security_helper specified in this plugin
-instead of core security helper curl_security_helper.
+A function tool_curlmanager_security_helper is defined in admin/tool/curlmanager/lib.php which will be called back.
 
-curlmanager_security_helper extends core plugin helper curl_security_helper and override url_is_blocked method in 
-core security helper curl_security_helper to allow only specified list hosts/prots to make curl requests.
+A curlmanager_security_helper object will be returned from the above function and url_is_blocked method in curlmanager_security_helper will be triggered before making each curl request.
 
-To configure a list of allow hosts and ports:
+What does it do?
+-----------------
 
-```php
-$CFG->curlsecurityallowedhosts
-$CFG->curlsecurityallowedport
-```
+1. Allow curl requests only on ```List of allow hosts``` specified in plugin settings if ```Allowed hosts``` setting is enabled.
+
+2. Log all curl requests made by moodle curl (new curl()) or functions that uses moodle curl (e.g. download_file_content) irrespective an url is blocked or not.
+
+3. Report on the curl requests - summary report.
+
+4. Report on the curl requests - domain aggregation report.
+
+5. Please note URL will be treated as blocked if the url is specified in ```List of allow hosts``` and included in $CFG->curlsecurityblockedhosts.
+
 
 Caveats
 -------
@@ -60,7 +63,6 @@ Branches
 | ----------------- | ------------------------ |------------ | ---------  | -----------|
 | 3.9               |                          | VERSION1    | 7.4+       | MDL-70649  |
 |                   |  12                      | VERSION1    | 7.0+       | MDL-70649  |
-|                   |  9 - 11                  | VERSION1    | 5.5+       | MDL-70649  |
 
 Installation
 ------------
