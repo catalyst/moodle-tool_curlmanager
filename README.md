@@ -39,6 +39,20 @@ $CFG->curlsecurityallowedhosts
 $CFG->curlsecurityallowedport
 ```
 
+Caveats
+-------
+
+Not all outgoing traffic will be logged, there are some known edge cases:
+
+* All Moodle code and plugins which use the Moodle curl libraries should use the security helper.
+  However a plugin can pass in 'ignoresecurity'. In general this should only be done for internal
+  services and not for traffic outbound the internet.
+* Some Moodle plugins do not user the Moodle curl libraries, in particular Guzzle is a very common
+  library in use. These will not use the security helper, but if they are being used for general
+  internet traffic then they *should* use the Moodle proxy settings.
+* Code which uses curl inside a DB transaction which gets rolled back. In this case the security
+  helper will be used, but the logging may not happen.
+
 Branches
 --------
 
