@@ -28,6 +28,7 @@ require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
 use \tool_curlmanager\table\report;
+use \tool_curlmanager\event\curlmanager_stats_reset;
 
 admin_externalpage_setup('curlmanager_report',
                         '',
@@ -37,8 +38,18 @@ admin_externalpage_setup('curlmanager_report',
                     );
 
 $viewdomain = optional_param('domain', false, PARAM_TEXT);
-
 $download = optional_param('download', '', PARAM_ALPHA);
+
+$resetallcurlstatistics = optional_param('resetallcurlstatistics', 0, PARAM_INT);
+if ($resetallcurlstatistics == 1 && confirm_sesskey()) {
+    // Log this reset statistics event
+    $event = curlmanager_stats_reset::create_log();
+    $event->trigger();
+
+    // Delete all records in mdl_tool_curlmanager table.
+    $DB->delete_records('tool_curlmanager');
+    redirect(new moodle_url('/admin/tool/curlmanager/report.php'));
+}
 
 $table = new report('curlmanagerreportstable');
 
@@ -55,6 +66,21 @@ if (!$table->is_downloading()) {
     echo $OUTPUT->header();
     echo $OUTPUT->heading($title);
 }
+
+
+$action = new \confirm_action(get_string('areyousuretodeleteallrecords', 'tool_curlmanager'));
+$urlresetallcspstatistics = new moodle_url($PAGE->url, array(
+    'resetallcurlstatistics' => 1,
+    'sesskey' => sesskey(),
+));
+echo $OUTPUT->single_button($urlresetallcspstatistics,
+                get_string('resetallcurlstatistics', 'tool_curlmanager'),
+                'post',
+                [
+                    'actions' => [$action]
+                ]
+            );
+
 
 $count = get_string('count', 'tool_curlmanager');
 $plugin = get_string('plugin', 'tool_curlmanager');

@@ -50,7 +50,12 @@ $string['timeupdated'] = 'Time Updated';
 $string['download'] = 'Download';
 $string['yes'] = 'Yes';
 $string['no'] = 'No';
+$string['resetallcurlstatistics'] = 'Reset all statistics';
+$string['areyousuretodeleteallrecords'] = 'Are you sure to delete all Curl manager report records?';
 
 // Curl manager domain report header.
 $string['sum'] = '#';
 $string['host'] = 'Domain';
+
+// Events.
+$string['event:logresetstatsevent'] = 'Reset statistics';
