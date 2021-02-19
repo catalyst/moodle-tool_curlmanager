@@ -14,8 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
- * moodle-tool_curlmanager version.
+ * Tasks
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -23,9 +24,19 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2021021900;
-$plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'tool_curlmanager';
+defined('MOODLE_INTERNAL') || die();
+
+// Purge old data from tool_curlmanager table at 10:00 PM daily.
+$tasks = [
+    [
+        'classname' => 'tool_curlmanager\tasks\purge_old_data',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '22',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ]
+];
+

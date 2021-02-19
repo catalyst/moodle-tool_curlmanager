@@ -14,18 +14,36 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_curlmanager\task;
+
+defined('MOODLE_INTERNAL') || die();
+
 /**
- * moodle-tool_curlmanager version.
+ * Purge old data.
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
  * @copyright Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class purge_old_data extends \core\task\scheduled_task {
 
-defined('MOODLE_INTERNAL') || die;
+    public function get_name() {
+        return get_string('purgeolddata', 'tool_curlmanager');
+    }
 
-$plugin->version = 2021021900;
-$plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'tool_curlmanager';
+    public function execute() {
+
+        global $DB;
+
+        mtrace("Start purging curlmanager data on ". date("Y-m-d H:i:s"));
+
+        $config = get_config('tool_curlmanager');
+
+        $DB->execute('DELETE FROM mdl_tool_curlmanager WHERE timeupdated < :purgedate',
+                        ['purgedate' => (time() - (int)$config->purgedataperiod)]
+                        );
+
+        mtrace("Purged data on " . date("Y-m-d H:i:s"));
+    }
+}
