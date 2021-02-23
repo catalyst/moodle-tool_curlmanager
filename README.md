@@ -20,9 +20,8 @@ How does it work?
 This relies on backporting this tracker:
 
 Allow plugins to augment the curl security helper via callback
-```
+
 https://tracker.moodle.org/browse/MDL-70649
-```
 
 A function tool_curlmanager_security_helper is defined in admin/tool/curlmanager/lib.php which will be called back.
 
@@ -39,7 +38,7 @@ What does it do?
 
 4. Report on the curl requests - domain aggregation report.
 
-5. Please note URL will be treated as blocked if the url is specified in ```List of allow hosts``` and included in $CFG->curlsecurityblockedhosts.
+5. Please note URL will be treated as blocked if the url is specified in ```List of allow hosts``` and included in ```$CFG->curlsecurityblockedhosts```.
 
 
 Caveats
@@ -78,6 +77,19 @@ mkdir -p admin\tool\curlmanager
 unzip VERSION1.zip -d admin\tool\curlmanager
 ```
 Then go to your Moodle admin interface and complete installation and configuration.
+
+Testing
+-------
+
+Fire of a quick curl through the Moodle curl library:
+
+```sh
+php -r "define('CLI_SCRIPT', 1); require('config.php'); ((new curl())->get('https://catalyst-au.net'));"
+```
+
+You should now see this appear in the domain report:
+
+/admin/tool/curlmanager/domain_report.php
 
 References
 ----------
