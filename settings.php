@@ -42,6 +42,10 @@ if ($hassiteconfig) {
     $description = new lang_string('settings:allowedhosts_description', 'tool_curlmanager');
     $settings->add(new admin_setting_configtextarea('tool_curlmanager/allowedhosts', $name, $description, '', PARAM_TEXT));
 
+    $name = new lang_string('settings:purgedataperiod', 'tool_curlmanager');
+    $description = new lang_string('settings:purgedataperiod_description', 'tool_curlmanager');
+    $settings->add(new admin_setting_configduration('tool_curlmanager/purgedataperiod', $name, $description, 86400 * 90, 86400));
+
     if (file_exists($CFG->dirroot . '/totara')) {
         $ADMIN->add('tool_curlmanager',
             new admin_externalpage('curlmanager_report',

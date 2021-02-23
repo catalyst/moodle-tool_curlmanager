@@ -37,6 +37,8 @@ $string['settings:enabled'] = 'Allowed hosts enabled';
 $string['settings:enabled_description'] = '';
 $string['settings:allowedhosts'] = 'List of allowed hosts';
 $string['settings:allowedhosts_description'] = 'Please specify one allowed host only for each line.';
+$string['settings:purgedataperiod'] = 'Purge data not updated in ';
+$string['settings:purgedataperiod_description'] = 'The data not updated in the period specified above will be purged';
 
 // Curl manager report header.
 $string['count'] = '#';
@@ -59,3 +61,6 @@ $string['host'] = 'Domain';
 
 // Events.
 $string['event:logresetstatsevent'] = 'Reset statistics';
+
+// Tasks.
+$string['purgeolddata'] = 'Purge old data';
