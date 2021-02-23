@@ -42,7 +42,7 @@ $download = optional_param('download', '', PARAM_ALPHA);
 
 $resetallcurlstatistics = optional_param('resetallcurlstatistics', 0, PARAM_INT);
 if ($resetallcurlstatistics == 1 && confirm_sesskey()) {
-    // Log this reset statistics event
+    // Log this reset statistics event.
     $event = curlmanager_stats_reset::create_log();
     $event->trigger();
 

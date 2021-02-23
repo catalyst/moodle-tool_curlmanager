@@ -43,7 +43,6 @@ class purge_old_data extends \core\task\scheduled_task {
         mtrace("Start purging curlmanager data on ". date("Y-m-d H:i:s"));
         $DB->execute('DELETE FROM {tool_curlmanager} WHERE timeupdated < :purgedate',
                 ['purgedate' => (time() - (int)$config->purgedataperiod)]);
-        }
 
         mtrace("Purged data on " . date("Y-m-d H:i:s"));
     }
