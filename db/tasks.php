@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 // Purge old data from tool_curlmanager table at 10:00 PM daily.
 $tasks = [
     [
-        'classname' => 'tool_curlmanager\tasks\purge_old_data',
+        'classname' => 'tool_curlmanager\task\purge_old_data',
         'blocking' => 0,
         'minute' => '0',
         'hour' => '22',
