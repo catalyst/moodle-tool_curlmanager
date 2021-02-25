@@ -69,13 +69,12 @@ class curlmanager_security_helper extends curl_security_helper_base
         $curlsecurityhelper = new curl_security_helper();
         $urlblocked = $curlsecurityhelper->url_is_blocked($urlstring);
 
-        $codepath = '';
         $rootcodepath = '';
         $trace = debug_backtrace();
+        $formattedbacktrace = format_backtrace(debug_backtrace(), true);
         $lasttrace = count($trace) - 1;
         if (isset($trace[$lasttrace]['file'])) {
             $rootcodepath = $trace[$lasttrace]['file'];
-            $codepath = str_replace($CFG->dirroot, '', $rootcodepath);
         }
 
         $plugin = $this->getcomponentbycodepath($rootcodepath);
@@ -88,7 +87,7 @@ class curlmanager_security_helper extends curl_security_helper_base
         // Add a new record if not exist.
         // Otherwise update the reocrd with count+1 and timeupdated field.
         $record = $DB->get_records('tool_curlmanager',
-            ['host' => $host, 'plugin' => $plugin, 'codepath' => $codepath],
+            ['host' => $host, 'plugin' => $plugin],
             '',
             'id, count'
         );
@@ -98,6 +97,7 @@ class curlmanager_security_helper extends curl_security_helper_base
             $data = new \stdClass();
             $data->id = $record->id;
             $data->count = $record->count + 1;
+            $data->codepath = $formattedbacktrace;
             $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
             $data->urlblocked = $urlblocked ? 1 : 0;
             $data->timeupdated = time();
@@ -106,7 +106,7 @@ class curlmanager_security_helper extends curl_security_helper_base
         } else {
             $data = new \stdClass();
             $data->plugin = $plugin;
-            $data->codepath = $codepath;
+            $data->codepath = $formattedbacktrace;
             $data->url = $urlstring;
             $data->host = $host;
             $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
