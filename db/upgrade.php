@@ -14,8 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
- * moodle-tool_curlmanager version.
+ * tool_curlmanager upgrade code
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -23,9 +24,29 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+/**
+ * @param int $oldversion the version we are upgrading from
+ * @return bool result
+ */
+function xmldb_tool_curlmanager_upgrade($oldversion) {
+    global $DB;
 
-$plugin->version = 2021022500;
-$plugin->requires = 2017051500.00;   // Support back to 3.3 - Totara 12. Patches required
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'tool_curlmanager';
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2021022500) {
+
+        // Change codepath column from char to text
+        $table = new xmldb_table('tool_curlmanager');
+
+        $field = new xmldb_field('codepath');
+        $field->set_attributes(XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_type($table, $field, $continue = true, $feedback = true);
+        }
+
+        upgrade_plugin_savepoint(true, 2021022500, 'tool', 'curlmanager');
+    }
+
+    return true;
+}
