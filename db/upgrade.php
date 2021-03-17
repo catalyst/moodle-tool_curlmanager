@@ -35,7 +35,7 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
 
     if ($oldversion < 2021022500) {
 
-        // Change codepath column from char to text
+        // Change codepath column from char to text.
         $table = new xmldb_table('tool_curlmanager');
 
         $field = new xmldb_field('codepath');
@@ -46,6 +46,21 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
         }
 
         upgrade_plugin_savepoint(true, 2021022500, 'tool', 'curlmanager');
+    }
+
+    if ($oldversion < 2021031700) {
+
+        // Change url column from char to text.
+        $table = new xmldb_table('tool_curlmanager');
+
+        $field = new xmldb_field('url');
+        $field->set_attributes(XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_type($table, $field, $continue = true, $feedback = true);
+        }
+
+        upgrade_plugin_savepoint(true, 2021031700, 'tool', 'curlmanager');
     }
 
     return true;
