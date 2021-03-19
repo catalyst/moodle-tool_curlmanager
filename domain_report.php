@@ -91,10 +91,12 @@ $table->define_headers([
     $host
 ]);
 
-$fields = 'hostcount, host';
-$from = "(SELECT sum(count) AS hostcount, host
-          FROM {tool_curlmanager}
-          GROUP BY host) AS A";
+$fields = 'host, hostcount';
+$from = "(SELECT host,
+                 sum(count) AS hostcount
+            FROM {tool_curlmanager}
+        GROUP BY host
+) AS A";
 $where = '1 = 1';
 $params = [];
 
