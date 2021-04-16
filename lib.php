@@ -31,7 +31,7 @@ use \tool_curlmanager\curlmanager_security_helper;
  * @return void
  * @throws \moodle_exception
  */
-function tool_curlmanager_security_helper() {
+function tool_curlmanager_curl_security_helper() {
 
     return new curlmanager_security_helper();
 }
