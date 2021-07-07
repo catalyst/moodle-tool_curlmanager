@@ -27,7 +27,7 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
-use \tool_curlmanager\table\domain_report;
+use \tool_curlmanager\table\report;
 use \tool_curlmanager\event\curlmanager_stats_reset;
 
 admin_externalpage_setup('curlmanager_domain_report', '', null, '', array('pagelayout' => 'report'));
@@ -45,7 +45,7 @@ if ($resetallcurlstatistics == 1 && confirm_sesskey()) {
     redirect(new moodle_url('/admin/tool/curlmanager/report.php'));
 }
 
-$table = new domain_report('curlmanagerdomainreportstable');
+$table = new report('curlmanagerdomainreportstable');
 
 $table->is_downloading($download, 'curlmanagerdomainreport', 'curlmanagerdomainreport');
 
@@ -74,8 +74,6 @@ echo $OUTPUT->single_button($urlresetallcspstatistics,
     ]
 );
 
-$sum = get_string('sum', 'tool_curlmanager');
-$host = get_string('host', 'tool_curlmanager');
 $download = get_string('download', 'tool_curlmanager');
 
 $table->define_baseurl($PAGE->url);
@@ -83,17 +81,23 @@ $table->sortable(true, 'hostcount', SORT_DESC);
 $table->set_attribute('class', 'generaltable generalbox table-sm');
 $table->define_columns([
     'hostcount',
-    'host'
+    'host',
+    'timecreated',
+    'timeupdated',
 ]);
 $table->no_sorting('download');
 $table->define_headers([
-    $sum,
-    $host
+    get_string('sum', 'tool_curlmanager'),
+    get_string('host', 'tool_curlmanager'),
+    get_string('timecreated', 'tool_curlmanager'),
+    get_string('timeupdated', 'tool_curlmanager'),
 ]);
 
-$fields = 'host, hostcount';
+$fields = 'host, hostcount, timecreated, timeupdated';
 $from = "(SELECT host,
-                 sum(count) AS hostcount
+                 sum(count) AS hostcount,
+                 min(timecreated) timecreated,
+                 max(timeupdated) timeupdated
             FROM {tool_curlmanager}
         GROUP BY host
 ) AS A";

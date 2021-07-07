@@ -127,7 +127,7 @@ class report extends \table_sql {
      */
     protected function col_timecreated($record) {
         if ($record->timecreated) {
-            return userdate($record->timecreated, get_string('strftimedatetimeshort'))
+            return userdate($record->timecreated, get_string('strftimedatetime'))
                 . '<br>'
                 . format_time(time() - $record->timecreated);
         } else {
@@ -143,11 +143,27 @@ class report extends \table_sql {
      */
     protected function col_timeupdated($record) {
         if ($record->timeupdated) {
-            return userdate($record->timeupdated, get_string('strftimedatetimeshort'))
+            return userdate($record->timeupdated, get_string('strftimedatetime'))
                 . '<br>'
                 . format_time(time() - $record->timecreated);
         } else {
             return  '-';
         }
+    }
+
+    /**
+     * Formatting column hostcount to link back to report table search by host.
+     *
+     * @param stdObject $record fieldset object of db table with field blockeduri
+     * @return string HTML e.g. <a href="url">url</a>
+     */
+    protected function col_hostcount($record) {
+        // Get blocked URI, and set as param for page if clicked on.
+        $url = new \moodle_url('/admin/tool/curlmanager/report.php',
+            [
+                'domain' => $record->host,
+            ]
+        );
+        return \html_writer::link($url, $record->hostcount);
     }
 }
