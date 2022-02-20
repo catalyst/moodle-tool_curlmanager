@@ -62,6 +62,11 @@ class curlmanager_security_helper extends curl_security_helper_base
             return true;
         }
 
+        // Just return false if we are not enabled - no blocking.
+        if (!get_config('tool_curlmanager', 'enabled')) {
+            return false;
+        }
+
         // Check if the host is in allowed list.
         $returnvalue = $this->host_is_allowed($host);
 
