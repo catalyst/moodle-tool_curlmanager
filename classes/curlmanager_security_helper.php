@@ -27,10 +27,7 @@ namespace tool_curlmanager;
 use core\files\curl_security_helper_base;
 use core\files\curl_security_helper;
 
-defined('MOODLE_INTERNAL') || die;
-
-class curlmanager_security_helper extends curl_security_helper_base
-{
+class curlmanager_security_helper extends curl_security_helper_base {
     /**
      * url_is_blocked.
      *

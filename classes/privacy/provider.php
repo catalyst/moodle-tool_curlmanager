@@ -24,8 +24,6 @@
  */
 namespace tool_curlmanager\privacy;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class provider
  * @package tool_curlmanager\privacy

@@ -26,10 +26,7 @@ namespace tool_curlmanager;
 
 use core_component;
 
-defined('MOODLE_INTERNAL') || die;
-
-class helper
-{
+class helper {
     /**
      * get_component_list.
      * This is a copy from core component as Totara 12 doesn't have this function required for this plugin to work.

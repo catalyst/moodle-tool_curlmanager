@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace tool_curlmanager\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * curlmanager_stats_reset
  *
