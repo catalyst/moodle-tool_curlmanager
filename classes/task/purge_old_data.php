@@ -16,8 +16,6 @@
 
 namespace tool_curlmanager\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Purge old data.
  *

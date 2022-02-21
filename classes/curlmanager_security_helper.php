@@ -27,10 +27,7 @@ namespace tool_curlmanager;
 use core\files\curl_security_helper_base;
 use core\files\curl_security_helper;
 
-defined('MOODLE_INTERNAL') || die;
-
-class curlmanager_security_helper extends curl_security_helper_base
-{
+class curlmanager_security_helper extends curl_security_helper_base {
     /**
      * url_is_blocked.
      *
@@ -60,6 +57,11 @@ class curlmanager_security_helper extends curl_security_helper_base
         } catch (\moodle_exception $e) {
             // Moodle exception is thrown if the $urlstring is invalid.
             return true;
+        }
+
+        // Just return false if we are not enabled - no blocking.
+        if (!get_config('tool_curlmanager', 'enabled')) {
+            return false;
         }
 
         // Check if the host is in allowed list.

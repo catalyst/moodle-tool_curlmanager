@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->version = 2021031700;
-$plugin->requires = 2017051500.00;   // Support back to 3.3 - Totara 12. Patches required
+$plugin->requires = 2017051500.00;   // Support back to 3.3 - Totara 12. Patches required.
 $plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'tool_curlmanager';
