@@ -34,8 +34,12 @@ if ($hassiteconfig) {
     $heading = new lang_string('settings:general', 'tool_curlmanager');
     $settings->add(new admin_setting_heading('tool_curlmanager/settings', $heading, ''));
 
-    $name = new lang_string('settings:enabled', 'tool_curlmanager');
-    $description = new lang_string('settings:enabled_description', 'tool_curlmanager');
+    $name = new lang_string('settings:loggingenabled', 'tool_curlmanager');
+    $description = new lang_string('settings:loggingenabled_description', 'tool_curlmanager');
+    $settings->add(new admin_setting_configcheckbox('tool_curlmanager/loggingenabled', $name, '', true));
+
+    $name = new lang_string('settings:blockingenabled', 'tool_curlmanager');
+    $description = new lang_string('settings:blockingenabled_description', 'tool_curlmanager');
     $settings->add(new admin_setting_configcheckbox('tool_curlmanager/enabled', $name, '', false));
 
     $name = new lang_string('settings:allowedhosts', 'tool_curlmanager');
