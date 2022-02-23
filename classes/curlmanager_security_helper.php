@@ -59,11 +59,6 @@ class curlmanager_security_helper extends curl_security_helper_base {
             return true;
         }
 
-        // Just return false if we are not enabled - no blocking.
-        if (!get_config('tool_curlmanager', 'enabled')) {
-            return false;
-        }
-
         // Check if the host is in allowed list.
         $returnvalue = $this->host_is_allowed($host);
 
@@ -71,52 +66,57 @@ class curlmanager_security_helper extends curl_security_helper_base {
         $curlsecurityhelper = new curl_security_helper();
         $urlblocked = $curlsecurityhelper->url_is_blocked($urlstring);
 
-        $rootcodepath = '';
-        $trace = debug_backtrace();
-        $formattedbacktrace = format_backtrace(debug_backtrace(), true);
-        $lasttrace = count($trace) - 1;
-        if (isset($trace[$lasttrace]['file'])) {
-            $rootcodepath = $trace[$lasttrace]['file'];
-        }
+        // TODO at Some Point™ this will need to be changed when this gets true unit tests.
+        // For now, let's stop it from busting core tests.
+        $log = get_config('tool_curlmanager', 'loggingenabled') && !PHPUNIT_TEST;
+        if ($log) {
+            $rootcodepath = '';
+            $trace = debug_backtrace();
+            $formattedbacktrace = format_backtrace(debug_backtrace(), true);
+            $lasttrace = count($trace) - 1;
+            if (isset($trace[$lasttrace]['file'])) {
+                $rootcodepath = $trace[$lasttrace]['file'];
+            }
 
-        $plugin = $this->getcomponentbycodepath($rootcodepath);
-        if ($plugin === false) {
-            $plugin = '';
-        }
+            $plugin = $this->getcomponentbycodepath($rootcodepath);
+            if ($plugin === false) {
+                $plugin = '';
+            }
 
-        // Suggest to deduplicate on host, plugin and codepath.
-        // Check if the host, plugin and codepath exists already.
-        // Add a new record if not exist.
-        // Otherwise update the reocrd with count+1 and timeupdated field.
-        $record = $DB->get_records('tool_curlmanager',
-            ['host' => $host, 'plugin' => $plugin],
-            '',
-            'id, count'
-        );
+            // Suggest to deduplicate on host, plugin and codepath.
+            // Check if the host, plugin and codepath exists already.
+            // Add a new record if not exist.
+            // Otherwise update the reocrd with count+1 and timeupdated field.
+            $record = $DB->get_records('tool_curlmanager',
+                ['host' => $host, 'plugin' => $plugin],
+                '',
+                'id, count'
+            );
 
-        if (count($record) > 0) {
-            $record = current($record);
-            $data = new \stdClass();
-            $data->id = $record->id;
-            $data->count = $record->count + 1;
-            $data->codepath = $formattedbacktrace;
-            $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
-            $data->urlblocked = $urlblocked ? 1 : 0;
-            $data->timeupdated = time();
-            $DB->update_record('tool_curlmanager', $data);
+            if (count($record) > 0) {
+                $record = current($record);
+                $data = new \stdClass();
+                $data->id = $record->id;
+                $data->count = $record->count + 1;
+                $data->codepath = $formattedbacktrace;
+                $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
+                $data->urlblocked = $urlblocked ? 1 : 0;
+                $data->timeupdated = time();
+                $DB->update_record('tool_curlmanager', $data);
 
-        } else {
-            $data = new \stdClass();
-            $data->plugin = $plugin;
-            $data->codepath = $formattedbacktrace;
-            $data->url = $urlstring;
-            $data->host = $host;
-            $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
-            $data->urlblocked = $urlblocked ? 1 : 0;
-            $data->count = 1;
-            $data->timecreated = time();
-            $data->timeupdated = time();
-            $DB->insert_record('tool_curlmanager', $data);
+            } else {
+                $data = new \stdClass();
+                $data->plugin = $plugin;
+                $data->codepath = $formattedbacktrace;
+                $data->url = $urlstring;
+                $data->host = $host;
+                $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
+                $data->urlblocked = $urlblocked ? 1 : 0;
+                $data->count = 1;
+                $data->timecreated = time();
+                $data->timeupdated = time();
+                $DB->insert_record('tool_curlmanager', $data);
+            }
         }
 
         // If allow host is enabled and the host is not in the allowed host list, return true.
