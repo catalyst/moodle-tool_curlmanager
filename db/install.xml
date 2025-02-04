@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="admin/tool/curlmanager/db" VERSION="20200324" COMMENT="XMLDB file for Moodle tool_curlmanager"
+<XMLDB PATH="admin/tool/curlmanager/db" VERSION="20250204" COMMENT="XMLDB file for Moodle tool_curlmanager"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="tool_curlmanager" COMMENT="Table for storing the outbound http requests make by moodle curl lib.">
+    <TABLE NAME="tool_curlmanager" COMMENT="Table for storing the outbound http requests made by moodle curl lib.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="reference" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="plugin" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="codepath" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="url" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
@@ -21,9 +22,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="mdl_tool_curlmanager_plugin" UNIQUE="false" FIELDS="plugin" COMMENT="To help searching for records."/>
-        <INDEX NAME="mdl_tool_curlmanager_host" UNIQUE="false" FIELDS="host" COMMENT="To help searching for records."/>
-        <INDEX NAME="mdl_tool_curlmanager_count" UNIQUE="false" FIELDS="count" COMMENT="To help searching for records."/>
+        <INDEX NAME="mdl_tool_curlmanager_reference" UNIQUE="true" FIELDS="reference" COMMENT="To help searching for records."/>
       </INDEXES>
     </TABLE>
   </TABLES>

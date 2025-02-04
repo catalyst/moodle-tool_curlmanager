@@ -41,6 +41,8 @@ $string['settings:allowedhosts'] = 'List of allowed hosts';
 $string['settings:allowedhosts_description'] = 'Please specify one allowed host only for each line.';
 $string['settings:purgedataperiod'] = 'Purge data not updated in ';
 $string['settings:purgedataperiod_description'] = 'The data not updated in the period specified above will be purged';
+$string['settings:blockonerror'] = 'Block on error';
+$string['settings:blockonerror_description'] = 'When an error occurs in the process of checking a url, if enabled this will block the url, otherwise the URL will be allowed.';
 
 // Curl manager report header.
 $string['count'] = '#';

@@ -36,7 +36,7 @@ if ($hassiteconfig) {
 
     $name = new lang_string('settings:loggingenabled', 'tool_curlmanager');
     $description = new lang_string('settings:loggingenabled_description', 'tool_curlmanager');
-    $settings->add(new admin_setting_configcheckbox('tool_curlmanager/loggingenabled', $name, '', true));
+    $settings->add(new admin_setting_configcheckbox('tool_curlmanager/loggingenabled', $name, '', false));
 
     $name = new lang_string('settings:blockingenabled', 'tool_curlmanager');
     $description = new lang_string('settings:blockingenabled_description', 'tool_curlmanager');
@@ -45,6 +45,10 @@ if ($hassiteconfig) {
     $name = new lang_string('settings:allowedhosts', 'tool_curlmanager');
     $description = new lang_string('settings:allowedhosts_description', 'tool_curlmanager');
     $settings->add(new admin_setting_configtextarea('tool_curlmanager/allowedhosts', $name, $description, '', PARAM_TEXT));
+
+    $name = new lang_string('settings:blockonerror', 'tool_curlmanager');
+    $description = new lang_string('settings:blockonerror_description', 'tool_curlmanager');
+    $settings->add(new admin_setting_configcheckbox('tool_curlmanager/blockonerror', $name, $description, true));
 
     $name = new lang_string('settings:purgedataperiod', 'tool_curlmanager');
     $description = new lang_string('settings:purgedataperiod_description', 'tool_curlmanager');

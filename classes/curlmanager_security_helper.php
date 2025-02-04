@@ -26,6 +26,8 @@ namespace tool_curlmanager;
 
 use core\files\curl_security_helper_base;
 use core\files\curl_security_helper;
+use moodle_url;
+use Throwable;
 
 class curlmanager_security_helper extends curl_security_helper_base {
     /**
@@ -34,129 +36,118 @@ class curlmanager_security_helper extends curl_security_helper_base {
      * @param string $urlstring the URL to check.
      * @return bool true if the URL is blocked or false if the URL is allowed.
      */
-    public function url_is_blocked($urlstring) : bool {
+    public function url_is_blocked($urlstring): bool {
+        try {
+            $curlsecurityhelper = new curl_security_helper();
+            $blockedbymoodle = $curlsecurityhelper->url_is_blocked($urlstring);
 
-        // Log the http request.
-        return $this->log_curl_http_requests($urlstring);
+            $url = new \moodle_url($urlstring);
+            $blockedbyus = !$this->host_is_allowed($url->get_host());
+
+            // Log the result.
+            $this->log_curl_http_requests($url, $blockedbymoodle, $blockedbyus);
+
+            return $blockedbymoodle || $blockedbyus;
+        } catch (Throwable $e) {
+            return (bool) get_config('tool_curlmanager', 'blockonerror');
+        }
+    }
+
+    /**
+     * Get DB reference to a given log.
+     * @param moodle_url $url
+     * @param string $codepath the stacktrace that called the above url
+     * @param bool $blockedbymoodle if this was blocked by moodles security settings
+     * @param bool $blockedbyus if this was blocked by our security settings
+     * @return string sha hash reference to used to index record.
+     */
+    public static function get_reference(moodle_url $url, string $codepath, bool $blockedbymoodle, bool $blockedbyus): string {
+        return hash('sha256', 'url:' . self::sanitise_url($url) . 'path:' . $codepath
+         . 'blockedbyus:' .  $blockedbyus . 'blockedbymoodle:' . $blockedbymoodle);
+    }
+
+    /**
+     * Sanitise url. This is mainly to keep URL intact but remove any query params.
+     * @param moodle_url $url
+     * @return string
+     */
+    private static function sanitise_url(moodle_url $url): string {
+        return $url->get_scheme() . '://' . $url->get_host() . $url->get_path(true);
     }
 
     /**
      * log_curl_http_requests.
      *
-     * @param string $urlstring the URL to check.
-     * @return bool true if blocked. false if url is allowed.
+     * @param moodle_url $url URL to log.
+     * @param bool $blockedbymoodle if was blocked by moodles denylist
+     * @param bool $blockedbyus if was blocked by our allowlist
      */
-    private function log_curl_http_requests(string $urlstring) : bool {
+    private function log_curl_http_requests(moodle_url $url, bool $blockedbymoodle, bool $blockedbyus) {
+        global $DB;
 
-        global $DB, $CFG;
-
-        // Try to parse the URL to get the 'host' and 'port' components.
-        try {
-            $url = new \moodle_url($urlstring);
-            $host = $url->get_host();
-        } catch (\moodle_exception $e) {
-            // Moodle exception is thrown if the $urlstring is invalid.
-            return true;
+        $shoudlog = get_config('tool_curlmanager', 'loggingenabled');
+        if (!$shoudlog) {
+            return;
         }
 
-        // Check if the host is in allowed list.
-        $returnvalue = $this->host_is_allowed($host);
-
-        // Call moodle curl_security_helper method url_is_blocked.
-        $curlsecurityhelper = new curl_security_helper();
-        $urlblocked = $curlsecurityhelper->url_is_blocked($urlstring);
-
-        // TODO at Some Point™ this will need to be changed when this gets true unit tests.
-        // For now, let's stop it from busting core tests.
-        $log = get_config('tool_curlmanager', 'loggingenabled') && !PHPUNIT_TEST;
-        if ($log) {
-            $rootcodepath = '';
-            $trace = debug_backtrace();
-            $formattedbacktrace = format_backtrace(debug_backtrace(), true);
-            $lasttrace = count($trace) - 1;
-            if (isset($trace[$lasttrace]['file'])) {
-                $rootcodepath = $trace[$lasttrace]['file'];
-            }
-
-            $plugin = $this->getcomponentbycodepath($rootcodepath);
-            if ($plugin === false) {
-                $plugin = '';
-            }
-
-            // Suggest to deduplicate on host, plugin and codepath.
-            // Check if the host, plugin and codepath exists already.
-            // Add a new record if not exist.
-            // Otherwise update the reocrd with count+1 and timeupdated field.
-            $record = $DB->get_records('tool_curlmanager',
-                ['host' => $host, 'plugin' => $plugin],
-                '',
-                'id, count'
-            );
-
-            if (count($record) > 0) {
-                $record = current($record);
-                $data = new \stdClass();
-                $data->id = $record->id;
-                $data->count = $record->count + 1;
-                $data->codepath = $formattedbacktrace;
-                $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
-                $data->urlblocked = $urlblocked ? 1 : 0;
-                $data->timeupdated = time();
-                $DB->update_record('tool_curlmanager', $data);
-
-            } else {
-                $data = new \stdClass();
-                $data->plugin = $plugin;
-                $data->codepath = $formattedbacktrace;
-                $data->url = $urlstring;
-                $data->host = $host;
-                $data->urlallowed = $returnvalue['allowed'] ? 1 : 0;
-                $data->urlblocked = $urlblocked ? 1 : 0;
-                $data->count = 1;
-                $data->timecreated = time();
-                $data->timeupdated = time();
-                $DB->insert_record('tool_curlmanager', $data);
-            }
+        // Build stacktrace.
+        $rootcodepath = '';
+        $trace = debug_backtrace();
+        $formattedbacktrace = format_backtrace(debug_backtrace(), true);
+        $lasttrace = count($trace) - 1;
+        if (isset($trace[$lasttrace]['file'])) {
+            $rootcodepath = $trace[$lasttrace]['file'];
         }
 
-        // If allow host is enabled and the host is not in the allowed host list, return true.
-        if ($returnvalue['allowhostenabled'] && $returnvalue['allowed'] === false) {
-            return true;
+        // Parse plugin.
+        $plugin = $this->getcomponentbycodepath($rootcodepath);
+        if ($plugin === false) {
+            $plugin = '';
         }
 
-        return false;
+        // Get path (without any query params).
+        $urlstring = self::sanitise_url($url);
+        $reference = self::get_reference($url, $formattedbacktrace, $blockedbymoodle, $blockedbyus);
+
+        // Upsert log using reference to de-dup.
+        $record = $DB->get_record('tool_curlmanager', ['reference' => $reference], 'id,count', IGNORE_MISSING);
+
+        if (!empty($record)) {
+            $DB->update_record('tool_curlmanager', [
+                'id' => $record->id,
+                'count' => $record->count + 1,
+                'timeupdated' => time(),
+            ]);
+        } else {
+            $DB->insert_record('tool_curlmanager', [
+                'reference' => $reference,
+                'plugin' => $plugin,
+                'codepath' => $formattedbacktrace,
+                'url' => $urlstring,
+                'host' => $url->get_host(),
+                'count' => 1,
+                'urlallowed' => !$blockedbyus,
+                'urlblocked' => $blockedbymoodle,
+                'timeupdated' => time(),
+                'timecreated' => time(),
+            ]);
+        }
     }
 
     /**
      * Check if allowed host settings is enabled and if a host is in allowhost list.
      *
-     * @param $host
-     * @return array
-     * @throws \dml_exception
+     * @param string $host
+     * @return bool true if is allowed, else false
      */
-    private function host_is_allowed($host) {
-
-        $returnvalue = [];
-
+    private function host_is_allowed($host): bool {
         $settings = get_config('tool_curlmanager');
 
         if (!$settings->enabled) {
-            $returnvalue['allowhostenabled'] = false;
-        } else {
-            $returnvalue['allowhostenabled'] = true;
+            return true;
         }
 
-        // Get an array of allowed hosts.
-        $allowedhosts = $this->get_allowed_hosts($settings->allowedhosts);
-
-        // Check if the host exists in the list of allowed hosts.
-        if (in_array($host, $allowedhosts)) {
-            $returnvalue['allowed'] = true;
-        } else {
-            $returnvalue['allowed'] = false;
-        }
-
-        return $returnvalue;
+        return in_array($host, $this->get_allowed_hosts($settings->allowedhosts));
     }
 
     /**
