@@ -14,6 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_curlmanager;
+
+use core\files\curl_security_helper_base;
+use core\files\curl_security_helper;
+use moodle_url;
+use Throwable;
+
 /**
  * curlmanager_security_helper
  *
@@ -22,13 +29,6 @@
  * @copyright Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace tool_curlmanager;
-
-use core\files\curl_security_helper_base;
-use core\files\curl_security_helper;
-use moodle_url;
-use Throwable;
-
 class curlmanager_security_helper extends curl_security_helper_base {
     /**
      * url_is_blocked.
@@ -76,7 +76,7 @@ class curlmanager_security_helper extends curl_security_helper_base {
     }
 
     /**
-     * log_curl_http_requests.
+     * Logs HTTP requests (if setting is enabled).
      *
      * @param moodle_url $url URL to log.
      * @param bool $blockedbymoodle if was blocked by moodles denylist
@@ -151,12 +151,12 @@ class curlmanager_security_helper extends curl_security_helper_base {
     }
 
     /**
-     * get_allowed_hosts.
+     * Gets list of allowed hosts from config.
      *
-     * @param $allowedhosts
+     * @param string $allowedhosts
      * @return array - an array of allowed hosts.
      */
-    private function get_allowed_hosts($allowedhosts) {
+    private function get_allowed_hosts($allowedhosts): array {
         if (empty($allowedhosts)) {
             return [];
         }

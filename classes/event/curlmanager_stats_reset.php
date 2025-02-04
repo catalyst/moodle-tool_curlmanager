@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 namespace tool_curlmanager\event;
 
 /**
@@ -30,7 +31,7 @@ class curlmanager_stats_reset extends \core\event\base {
      */
     public static function create_log() {
         $data = [
-            'context' => \context_system::instance()
+            'context' => \context_system::instance(),
         ];
         return self::create($data);
     }
@@ -50,7 +51,7 @@ class curlmanager_stats_reset extends \core\event\base {
      *
      * @return string
      */
-    public function get_description() : string {
+    public function get_description(): string {
         return "The user with id '$this->userid' deleted all data records in tool_curlmanager table.";
     }
 
@@ -59,7 +60,7 @@ class curlmanager_stats_reset extends \core\event\base {
      *
      * @return string
      */
-    public static function get_name() : string {
+    public static function get_name(): string {
         return get_string('event:logresetstatsevent', 'tool_curlmanager');
     }
 }

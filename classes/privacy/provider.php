@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_curlmanager\privacy;
+
 /**
  * tool_curlmanager Data provider.
  *
@@ -22,23 +24,14 @@
  * @copyright  2021 Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace tool_curlmanager\privacy;
-
-/**
- * Class provider
- * @package tool_curlmanager\privacy
- */
-class provider implements
-    \core_privacy\local\metadata\null_provider {
-
-    use \core_privacy\local\legacy_polyfill;
+class provider implements \core_privacy\local\metadata\null_provider {
 
     /**
      * Display reason no user data is stored.
      *
      * @return  string
      */
-    public static function _get_reason() {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }

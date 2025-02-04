@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * tool_curlmanager upgrade code
  *
@@ -27,6 +26,7 @@
 use tool_curlmanager\curlmanager_security_helper;
 
 /**
+ * Runs upgrade
  * @param int $oldversion the version we are upgrading from
  * @return bool result
  */

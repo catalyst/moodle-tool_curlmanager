@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_curlmanager;
+
+use core_component;
+
 /**
  * curlmanager_security_helper
  *
@@ -22,10 +26,6 @@
  * @copyright Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace tool_curlmanager;
-
-use core_component;
-
 class helper {
     /**
      * get_component_list.
@@ -48,7 +48,7 @@ class helper {
      *
      * @return array an associative array of components and their corresponding paths.
      */
-    public static function get_component_list() : array {
+    public static function get_component_list(): array {
         $components = [];
         // Get all plugins.
         foreach (core_component::get_plugin_types() as $plugintype => $typedir) {
