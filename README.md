@@ -1,11 +1,14 @@
 # moodle-tool_curlmanager
 
-* [What is this?](#what-is-this)
-* [How does it work?](#how-does-it-work)
-* [What does it do?](#what-does-it-do)
-* [Branches](#branches)
-* [Installation](#installation)
-* [References](#references)
+- [moodle-tool\_curlmanager](#moodle-tool_curlmanager)
+  - [What is this?](#what-is-this)
+  - [How does it work?](#how-does-it-work)
+  - [What does it do?](#what-does-it-do)
+  - [Caveats](#caveats)
+  - [Branches](#branches)
+  - [Installation](#installation)
+  - [Testing](#testing)
+  - [References](#references)
 
 
 What is this?
@@ -17,7 +20,7 @@ Moodle comes with a built in 'security helper' which is what enforces the $CFG->
 How does it work?
 -----------------
 
-This relies on backporting this tracker:
+This relies on this tracker which is now in Moodle core since 3.11:
 
 Allow plugins to augment the curl security helper via callback
 
@@ -49,7 +52,7 @@ Not all outgoing traffic will be logged, there are some known edge cases:
 * All Moodle code and plugins which use the Moodle curl libraries should use the security helper.
   However a plugin can pass in 'ignoresecurity'. In general this should only be done for internal
   services and not for traffic outbound the internet.
-* Some Moodle plugins do not user the Moodle curl libraries, in particular Guzzle is a very common
+* Some Moodle plugins do not use the Moodle curl libraries, in particular Guzzle is a very common
   library in use. These will not use the security helper, but if they are being used for general
   internet traffic then they *should* use the Moodle proxy settings.
 * Code which uses curl inside a DB transaction which gets rolled back. In this case the security
@@ -58,10 +61,9 @@ Not all outgoing traffic will be logged, there are some known edge cases:
 Branches
 --------
 
-| Moodle verion     |  Totara version          | Branch      | PHP        | Backports  |
-| ----------------- | ------------------------ |------------ | ---------  | -----------|
-| 3.9               |                          | VERSION1    | 7.4+       | MDL-70649  |
-|                   |  12                      | VERSION1    | 7.0+       | MDL-70649  |
+| Moodle verion     | Branch               |
+| ----------------- |--------------------- |
+| 4.1+              | MOODLE_401_STABLE    |
 
 Installation
 ------------
@@ -69,12 +71,6 @@ Checkout or download the plugin source code into folder `admin\tool_curlmanager`
 
 ```sh
 git clone git@github.com:catalyst/moodle-tool_curlmanager.git admin\tool\curlmanager
-```
-or
-```sh
-wget https://github.com/catalyst/moodle-tool_curlmanager/archive/VERSION1.zip
-mkdir -p admin\tool\curlmanager
-unzip VERSION1.zip -d admin\tool\curlmanager
 ```
 Then go to your Moodle admin interface and complete installation and configuration.
 

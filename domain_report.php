@@ -13,10 +13,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * This is an admin_externalpage 'curlmanager_domain_report' for displaying
- * the recorded outbound http requests made by moodle curl reports - aggregate by domain.
+ * This is an admin_externalpage 'curlmanager_domain_report'.
+ *
+ * For displaying the recorded outbound http requests made by moodle curl reports - aggregate by domain.
  *
  * @package   tool_curlmanager
  * @author    Xuan Gui <xuangui@catalyst-au.net>
@@ -27,10 +27,10 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
-use \tool_curlmanager\table\domain_report;
-use \tool_curlmanager\event\curlmanager_stats_reset;
+use tool_curlmanager\table\domain_report;
+use tool_curlmanager\event\curlmanager_stats_reset;
 
-admin_externalpage_setup('curlmanager_domain_report', '', null, '', array('pagelayout' => 'report'));
+admin_externalpage_setup('curlmanager_domain_report', '', null, '', ['pagelayout' => 'report']);
 
 $download = optional_param('download', '', PARAM_ALPHA);
 
@@ -62,15 +62,15 @@ if (!$table->is_downloading()) {
 }
 
 $action = new \confirm_action(get_string('areyousuretodeleteallrecords', 'tool_curlmanager'));
-$urlresetallcspstatistics = new moodle_url($PAGE->url, array(
+$urlresetallcspstatistics = new moodle_url($PAGE->url, [
     'resetallcurlstatistics' => 1,
     'sesskey' => sesskey(),
-));
+]);
 echo $OUTPUT->single_button($urlresetallcspstatistics,
     get_string('resetallcurlstatistics', 'tool_curlmanager'),
     'post',
     [
-        'actions' => [$action]
+        'actions' => [$action],
     ]
 );
 
@@ -83,12 +83,12 @@ $table->sortable(true, 'hostcount', SORT_DESC);
 $table->set_attribute('class', 'generaltable generalbox table-sm');
 $table->define_columns([
     'hostcount',
-    'host'
+    'host',
 ]);
 $table->no_sorting('download');
 $table->define_headers([
     $sum,
-    $host
+    $host,
 ]);
 
 $fields = 'host, hostcount';

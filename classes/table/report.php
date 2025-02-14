@@ -40,7 +40,7 @@ class report extends \table_sql {
     /**
      * Formatting column url that has URLs as links.
      *
-     * @param stdObject $record fieldset object of db table with field blockeduri
+     * @param stdClass $record fieldset object of db table with field blockeduri
      * @return string HTML e.g. <a href="url">url</a>
      */
     protected function col_url($record) {
@@ -78,7 +78,7 @@ class report extends \table_sql {
     /**
      * Formatting column codepath.
      *
-     * @param stdObject $record fieldset object of db table with field blockeduri
+     * @param stdClass $record fieldset object of db table with field blockeduri
      * @return string HTML e.g. <a href="url">url</a>
      */
     protected function col_codepath($record) {
@@ -94,7 +94,7 @@ class report extends \table_sql {
     /**
      * Format url allowed column.
      *
-     * @param $record
+     * @param stdClass $record
      * @return string
      */
     protected function col_urlallowed($record) {
@@ -108,7 +108,7 @@ class report extends \table_sql {
     /**
      * Format url blcoked column.
      *
-     * @param $record
+     * @param stdClass $record
      * @return string
      */
     protected function col_urlblocked($record) {
@@ -122,7 +122,7 @@ class report extends \table_sql {
     /**
      * Formatting unix timestamps in column named timecreated to human readable time.
      *
-     * @param stdObject $record fieldset object of db table with field timecreated
+     * @param stdClass $record fieldset object of db table with field timecreated
      * @return string human readable time
      */
     protected function col_timecreated($record) {
@@ -138,7 +138,7 @@ class report extends \table_sql {
     /**
      * Formatting unix timestamps in column named timeupdated to human readable time.
      *
-     * @param stdObject $record fieldset object of db table with field timeupdated
+     * @param stdClass $record fieldset object of db table with field timeupdated
      * @return string human readable time
      */
     protected function col_timeupdated($record) {

@@ -26,10 +26,17 @@ namespace tool_curlmanager\task;
  */
 class purge_old_data extends \core\task\scheduled_task {
 
-    public function get_name() {
+    /**
+     * Returns name.
+     * @return string
+     */
+    public function get_name(): string {
         return get_string('purgeolddata', 'tool_curlmanager');
     }
 
+    /**
+     * Executes task.
+     */
     public function execute() {
         global $DB;
 
