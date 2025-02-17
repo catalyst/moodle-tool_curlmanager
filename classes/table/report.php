@@ -145,7 +145,7 @@ class report extends \table_sql {
         if ($record->timeupdated) {
             return userdate($record->timeupdated, get_string('strftimedatetimeshort'))
                 . '<br>'
-                . format_time(time() - $record->timecreated);
+                . format_time(time() - $record->timeupdated);
         } else {
             return  '-';
         }
