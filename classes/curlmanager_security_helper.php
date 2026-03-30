@@ -91,16 +91,11 @@ class curlmanager_security_helper extends curl_security_helper_base {
         }
 
         // Build stacktrace.
-        $rootcodepath = '';
-        $trace = debug_backtrace();
-        $formattedbacktrace = format_backtrace(debug_backtrace(), true);
-        $lasttrace = count($trace) - 1;
-        if (isset($trace[$lasttrace]['file'])) {
-            $rootcodepath = $trace[$lasttrace]['file'];
-        }
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $formattedbacktrace = format_backtrace($trace, true);
 
         // Parse plugin.
-        $plugin = $this->getcomponentbycodepath($rootcodepath);
+        $plugin = $this->getcomponentbycodepath($trace);
         if ($plugin === false) {
             $plugin = '';
         }
@@ -160,33 +155,45 @@ class curlmanager_security_helper extends curl_security_helper_base {
         if (empty($allowedhosts)) {
             return [];
         }
-        return array_filter(array_map('trim', explode("\n", $allowedhosts)), function($entry) {
+        return array_filter(array_map('trim', explode("\n", $allowedhosts)), function ($entry) {
             return !empty($entry);
         });
     }
 
     /**
-     * Get component name by code path.
+     * Get component name by searching all frames in the call trace.
      *
-     * @param string $codepath
-     * @return string $component or bool if component not found.
-     * @throws \dml_exception
+     * Iterates from the entry point inward so the outermost plugin in the call
+     * chain is returned. Paths are compared relative to $CFG->dirroot so the
+     * detection is not affected by the absolute location of the Moodle root.
+     *
+     * @param array $trace result of debug_backtrace()
+     * @return string|false component frankenstyle name, or false if not found
      */
-    private function getcomponentbycodepath(string $codepath) {
+    private function getcomponentbycodepath(array $trace) {
+        global $CFG;
 
-        if (empty($codepath)) {
-            return false;
+        // Build a relative-path → component name map once.
+        $componentmap = [];
+        foreach (helper::get_component_list() as $components) {
+            foreach ($components as $componentname => $componentpath) {
+                if (!empty($componentpath)) {
+                    $relative = str_replace($CFG->dirroot, '', $componentpath);
+                    if (!empty($relative)) {
+                        $componentmap[$relative] = $componentname;
+                    }
+                }
+            }
         }
 
-        // Remove the file name from code path.
-        $codepath = dirname($codepath);
-
-        $componentinfo = helper::get_component_list();
-
-        foreach ($componentinfo as $components) {
-
-            foreach ($components as $componentname => $componentpath) {
-                if (!empty($componentpath) && strstr($codepath, $componentpath)) {
+        // Walk from the entry-point frame inward, returning the first plugin match.
+        foreach (array_reverse($trace) as $frame) {
+            if (empty($frame['file'])) {
+                continue;
+            }
+            $reldir = str_replace($CFG->dirroot, '', dirname($frame['file']));
+            foreach ($componentmap as $relativepath => $componentname) {
+                if (str_starts_with($reldir, $relativepath)) {
                     return $componentname;
                 }
             }

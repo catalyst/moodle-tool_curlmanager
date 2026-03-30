@@ -28,11 +28,96 @@ use moodle_url;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers    \tool_curlmanager\curlmanager_security_helper
  */
-class curlmanager_security_helper_test extends advanced_testcase {
+final class curlmanager_security_helper_test extends advanced_testcase {
+    /**
+     * Helper to call the private getcomponentbycodepath method via reflection.
+     *
+     * @param array $trace synthetic debug_backtrace()-style array
+     * @return string|false
+     */
+    private function call_getcomponentbycodepath(array $trace) {
+        $helper = new curlmanager_security_helper();
+        $rm = new \ReflectionMethod(curlmanager_security_helper::class, 'getcomponentbycodepath');
+        return $rm->invoke($helper, $trace);
+    }
+
+    /**
+     * Data provider for test_getcomponentbycodepath.
+     *
+     * @return array
+     */
+    public static function getcomponentbycodepath_provider(): array {
+        global $CFG;
+
+        // Use known stable plugin paths relative to dirroot.
+        $dirroot = $CFG->dirroot;
+
+        return [
+            'empty trace returns false' => [
+                'trace'    => [],
+                'expected' => false,
+            ],
+            'frame with no file key returns false' => [
+                'trace'    => [['function' => 'some_function']],
+                'expected' => false,
+            ],
+            'core lib file returns false' => [
+                'trace'    => [
+                    ['file' => $dirroot . '/lib/setup.php'],
+                ],
+                'expected' => false,
+            ],
+            'file inside tool_curlmanager detected' => [
+                'trace'    => [
+                    ['file' => $dirroot . '/admin/tool/curlmanager/classes/curlmanager_security_helper.php'],
+                ],
+                'expected' => 'tool_curlmanager',
+            ],
+            'file in subdirectory of plugin detected' => [
+                'trace'    => [
+                    ['file' => $dirroot . '/admin/tool/curlmanager/tests/curlmanager_security_helper_test.php'],
+                ],
+                'expected' => 'tool_curlmanager',
+            ],
+            'outermost plugin in trace wins' => [
+                // Entry point (last frame, reversed to first in iteration) is tool_curlmanager;
+                // inner frame is tool_task. The outermost (entry point) should be returned.
+                'trace'    => [
+                    ['file' => $dirroot . '/admin/tool/task/classes/task_logger.php'], // inner (index 0)
+                    ['file' => $dirroot . '/admin/tool/curlmanager/lib.php'], // outer (index 1)
+                ],
+                'expected' => 'tool_curlmanager',
+            ],
+            'only core entry point with plugin inner frame returns plugin' => [
+                // Entry point is a core file, but a plugin is found deeper in.
+                'trace'    => [
+                    ['file' => $dirroot . '/admin/tool/curlmanager/classes/curlmanager_security_helper.php'], // inner
+                    ['file' => $dirroot . '/lib/setup.php'], // entry
+                ],
+                'expected' => 'tool_curlmanager',
+            ],
+        ];
+    }
+
+    /**
+     * Tests getcomponentbycodepath detects the correct plugin from a trace.
+     *
+     * This covers detection working regardless of dirroot (before and after the
+     * /public/ subdirectory move) because both the component paths and the trace
+     * file paths are normalised relative to $CFG->dirroot before comparison.
+     *
+     * @dataProvider getcomponentbycodepath_provider
+     * @param array $trace synthetic trace frames
+     * @param string|false $expected expected component name or false
+     */
+    public function test_getcomponentbycodepath(array $trace, $expected): void {
+        $this->assertEquals($expected, $this->call_getcomponentbycodepath($trace));
+    }
+
     /**
      * Tests get_reference function
      */
-    public function test_get_reference() {
+    public function test_get_reference(): void {
         $url1 = new moodle_url('https://test.localhost/test.php/abc?param=123');
         $url2 = new moodle_url('https://test.localhost/test.php/abc?param=456');
 
@@ -110,8 +195,13 @@ class curlmanager_security_helper_test extends advanced_testcase {
      * @param bool $expectedblocked
      * @dataProvider url_is_blocked_provider
      */
-    public function test_url_is_blocked(string $allowlist, string $denylist, bool $allowlistenabled,
-        string $url, bool $expectedblocked) {
+    public function test_url_is_blocked(
+        string $allowlist,
+        string $denylist,
+        bool $allowlistenabled,
+        string $url,
+        bool $expectedblocked
+    ): void {
         global $CFG;
         $this->resetAfterTest(true);
         set_config('enabled', $allowlistenabled, 'tool_curlmanager');
