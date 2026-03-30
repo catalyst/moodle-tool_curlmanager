@@ -55,7 +55,7 @@ class report extends \table_sql {
      * @param int $size How many chars to show
      * @return string HTML e.g. <a href="documenturi">documenturi</a>
      */
-    private function format_uri($uri, $label = '', $size = 40) {
+    private function format_uri($uri, $label = '', $size = 120) {
         global $CFG;
         if (!$uri) {
             return '-';
@@ -78,17 +78,11 @@ class report extends \table_sql {
     /**
      * Formatting column codepath.
      *
-     * @param stdClass $record fieldset object of db table with field blockeduri
-     * @return string HTML e.g. <a href="url">url</a>
+     * @param stdClass $record fieldset object of db table with field codepath
+     * @return string HTML unordered list of stack trace lines
      */
     protected function col_codepath($record) {
-        $backtrace = array_filter(explode("* line", $record->codepath));
-        array_walk($backtrace,
-                            function(&$value, $key) {
-                                $value = '* line'. $value;
-                            }
-                    );
-        return implode("<br>", $backtrace);
+        return \html_writer::tag('small', format_text($record->codepath, FORMAT_MARKDOWN));
     }
 
     /**
