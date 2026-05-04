@@ -193,7 +193,7 @@ class curlmanager_security_helper extends curl_security_helper_base {
             }
             $reldir = str_replace($CFG->dirroot, '', dirname($frame['file']));
             foreach ($componentmap as $relativepath => $componentname) {
-                if (str_starts_with($reldir, $relativepath)) {
+                if (strpos($reldir, $relativepath) === 0) {
                     return $componentname;
                 }
             }

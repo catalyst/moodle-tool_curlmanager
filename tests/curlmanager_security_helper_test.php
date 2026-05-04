@@ -38,6 +38,9 @@ final class curlmanager_security_helper_test extends advanced_testcase {
     private function call_getcomponentbycodepath(array $trace) {
         $helper = new curlmanager_security_helper();
         $rm = new \ReflectionMethod(curlmanager_security_helper::class, 'getcomponentbycodepath');
+        if (PHP_VERSION_ID < 80100) {
+            $rm->setAccessible(true);
+        }
         return $rm->invoke($helper, $trace);
     }
 
