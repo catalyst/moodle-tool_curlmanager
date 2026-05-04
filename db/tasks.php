@@ -38,4 +38,3 @@ $tasks = [
         'dayofweek' => '*',
     ],
 ];
-

@@ -36,7 +36,6 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2021022500) {
-
         // Change codepath column from char to text.
         $table = new xmldb_table('tool_curlmanager');
 
@@ -51,7 +50,6 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021031700) {
-
         // Change url column from char to text.
         $table = new xmldb_table('tool_curlmanager');
 
@@ -66,7 +64,6 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
     }
 
     if ($oldversion < 2025020401) {
-
         // Add the new reference field, originally as null allowed.
         $table = new xmldb_table('tool_curlmanager');
         $field = new xmldb_field('reference', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'timeupdated');
@@ -77,8 +74,12 @@ function xmldb_tool_curlmanager_upgrade($oldversion) {
             $records = $DB->get_recordset('tool_curlmanager', [], '', 'id,url,codepath,urlallowed,urlblocked');
 
             foreach ($records as $record) {
-                $ref = curlmanager_security_helper::get_reference(new moodle_url($record->url),
-                    $record->codepath, $record->urlblocked, !$record->urlallowed);
+                $ref = curlmanager_security_helper::get_reference(
+                    new moodle_url($record->url),
+                    $record->codepath,
+                    $record->urlblocked,
+                    !$record->urlallowed
+                );
 
                 // If a record already has this ref, just merge the counts
                 // (we are about to add a unique index, so we cannot have duplicates).

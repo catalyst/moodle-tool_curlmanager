@@ -36,7 +36,6 @@ require_once($CFG->libdir . '/tablelib.php');
  * - Adds a button to download a record.
  */
 class report extends \table_sql {
-
     /**
      * Formatting column url that has URLs as links.
      *

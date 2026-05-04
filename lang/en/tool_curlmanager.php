@@ -25,46 +25,36 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['areyousuretodeleteallrecords'] = 'Are you sure to delete all Curl manager report records?';
+$string['codepath'] = 'Path';
+$string['count'] = '#';
+$string['curlmanagerdomainreport'] = 'Curl manager domain report';
+$string['curlmanagerreport'] = 'Curl manager report';
+$string['curlmanagersettings'] = 'Curl manager settings';
+$string['download'] = 'Download';
+$string['event:logresetstatsevent'] = 'Reset statistics';
+$string['host'] = 'Domain';
+$string['no'] = 'No';
+$string['plugin'] = 'Plugin';
 $string['pluginname'] = 'Curl manager';
 $string['privacy:metadata'] = 'The tool curl manager plugin contains no user specific data.';
-
-// Settings.
-$string['curlmanagersettings'] = 'Curl manager settings';
-$string['curlmanagerreport'] = 'Curl manager report';
-$string['curlmanagerdomainreport'] = 'Curl manager domain report';
+$string['purgeolddata'] = 'Purge old data';
+$string['resetallcurlstatistics'] = 'Reset all statistics';
+$string['settings:allowedhosts'] = 'List of allowed hosts';
+$string['settings:allowedhosts_description'] = 'Please specify one allowed host only for each line.';
+$string['settings:blockingenabled'] = 'Allowed hosts enabled';
+$string['settings:blockingenabled_description'] = 'Enable host blocking. Any host not in the allowlist will be blocked.';
+$string['settings:blockonerror'] = 'Block on error';
+$string['settings:blockonerror_description'] = 'When an error occurs in the process of checking a url, if enabled this will block the url, otherwise the URL will be allowed.';
 $string['settings:general'] = 'General curl manager settings';
 $string['settings:loggingenabled'] = 'Enable cURL logging';
 $string['settings:loggingenabled_description'] = 'Enable logging of all outgoing cURL calls from Moodle.';
-$string['settings:blockingenabled'] = 'Allowed hosts enabled';
-$string['settings:blockingenabled_description'] = 'Enable host blocking. Any host not in the allowlist will be blocked.';
-$string['settings:allowedhosts'] = 'List of allowed hosts';
-$string['settings:allowedhosts_description'] = 'Please specify one allowed host only for each line.';
 $string['settings:purgedataperiod'] = 'Purge data not updated in ';
 $string['settings:purgedataperiod_description'] = 'The data not updated in the period specified above will be purged';
-$string['settings:blockonerror'] = 'Block on error';
-$string['settings:blockonerror_description'] = 'When an error occurs in the process of checking a url, if enabled this will block the url, otherwise the URL will be allowed.';
-
-// Curl manager report header.
-$string['count'] = '#';
-$string['plugin'] = 'Plugin';
-$string['url'] = 'URL';
-$string['codepath'] = 'Path';
-$string['urlallowed'] = "URL Allowed";
-$string['urlblocked'] = "URL Blocked";
+$string['sum'] = '#';
 $string['timecreated'] = 'Time Created';
 $string['timeupdated'] = 'Time Updated';
-$string['download'] = 'Download';
+$string['url'] = 'URL';
+$string['urlallowed'] = 'URL Allowed';
+$string['urlblocked'] = 'URL Blocked';
 $string['yes'] = 'Yes';
-$string['no'] = 'No';
-$string['resetallcurlstatistics'] = 'Reset all statistics';
-$string['areyousuretodeleteallrecords'] = 'Are you sure to delete all Curl manager report records?';
-
-// Curl manager domain report header.
-$string['sum'] = '#';
-$string['host'] = 'Domain';
-
-// Events.
-$string['event:logresetstatsevent'] = 'Reset statistics';
-
-// Tasks.
-$string['purgeolddata'] = 'Purge old data';

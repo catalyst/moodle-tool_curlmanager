@@ -25,7 +25,6 @@ namespace tool_curlmanager\task;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class purge_old_data extends \core\task\scheduled_task {
-
     /**
      * Returns name.
      * @return string
@@ -45,9 +44,11 @@ class purge_old_data extends \core\task\scheduled_task {
             return;
         }
 
-        mtrace("Start purging curlmanager data on ". date("Y-m-d H:i:s"));
-        $DB->execute('DELETE FROM {tool_curlmanager} WHERE timeupdated < :purgedate',
-                ['purgedate' => (time() - (int)$config->purgedataperiod)]);
+        mtrace("Start purging curlmanager data on " . date("Y-m-d H:i:s"));
+        $DB->execute(
+            'DELETE FROM {tool_curlmanager} WHERE timeupdated < :purgedate',
+            ['purgedate' => (time() - (int)$config->purgedataperiod)]
+        );
 
         mtrace("Purged data on " . date("Y-m-d H:i:s"));
     }

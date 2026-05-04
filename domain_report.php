@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * This is an admin_externalpage 'curlmanager_domain_report'.
  *
@@ -25,7 +26,7 @@
  */
 
 require_once(__DIR__ . '/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 use tool_curlmanager\table\domain_report;
 use tool_curlmanager\event\curlmanager_stats_reset;
@@ -66,7 +67,8 @@ $urlresetallcspstatistics = new moodle_url($PAGE->url, [
     'resetallcurlstatistics' => 1,
     'sesskey' => sesskey(),
 ]);
-echo $OUTPUT->single_button($urlresetallcspstatistics,
+echo $OUTPUT->single_button(
+    $urlresetallcspstatistics,
     get_string('resetallcurlstatistics', 'tool_curlmanager'),
     'post',
     [
@@ -106,4 +108,3 @@ $table->out(30, true);
 if (!$table->is_downloading()) {
     echo $OUTPUT->footer();
 }
-

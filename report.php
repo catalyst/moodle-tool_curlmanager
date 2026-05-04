@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * This is an admin_externalpage 'curlmanager_report'.
  *
@@ -25,17 +26,18 @@
  */
 
 require_once(__DIR__ . '/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 use tool_curlmanager\table\report;
 use tool_curlmanager\event\curlmanager_stats_reset;
 
-admin_externalpage_setup('curlmanager_report',
-                        '',
-                        null,
-                        '',
-                        ['pagelayout' => 'report']
-                    );
+admin_externalpage_setup(
+    'curlmanager_report',
+    '',
+    null,
+    '',
+    ['pagelayout' => 'report']
+);
 
 $viewdomain = optional_param('domain', false, PARAM_TEXT);
 $download = optional_param('download', '', PARAM_ALPHA);
@@ -73,13 +75,14 @@ $urlresetallcspstatistics = new moodle_url($PAGE->url, [
     'resetallcurlstatistics' => 1,
     'sesskey' => sesskey(),
 ]);
-echo $OUTPUT->single_button($urlresetallcspstatistics,
-                get_string('resetallcurlstatistics', 'tool_curlmanager'),
-                'post',
-                [
-                    'actions' => [$action],
-                ]
-            );
+echo $OUTPUT->single_button(
+    $urlresetallcspstatistics,
+    get_string('resetallcurlstatistics', 'tool_curlmanager'),
+    'post',
+    [
+        'actions' => [$action],
+    ]
+);
 
 
 $count = get_string('count', 'tool_curlmanager');
@@ -133,4 +136,3 @@ $table->out(30, true);
 if (!$table->is_downloading()) {
     echo $OUTPUT->footer();
 }
-
