@@ -31,6 +31,10 @@ use tool_curlmanager\curlmanager_security_helper;
  * @throws \moodle_exception
  */
 function tool_curlmanager_curl_security_helper() {
+    // Do not interfere with PHPUnit tests that inject their own mock security helper.
+    if (defined('PHPUNIT_TEST') && PHPUNIT_TEST) {
+        return null;
+    }
 
     return new curlmanager_security_helper();
 }

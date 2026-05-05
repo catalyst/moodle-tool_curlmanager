@@ -36,7 +36,6 @@ require_once($CFG->libdir . '/tablelib.php');
  * - Adds a button to download a record.
  */
 class domain_report extends \table_sql {
-
     /**
      * Formatting column hostcount to link back to report table search by host.
      *
@@ -45,7 +44,8 @@ class domain_report extends \table_sql {
      */
     protected function col_hostcount($record) {
         // Get blocked URI, and set as param for page if clicked on.
-        $url = new \moodle_url('/admin/tool/curlmanager/report.php',
+        $url = new \moodle_url(
+            '/admin/tool/curlmanager/report.php',
             [
                 'domain' => $record->host,
             ]

@@ -55,28 +55,40 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configduration('tool_curlmanager/purgedataperiod', $name, $description, 86400 * 90, 86400));
 
     if (file_exists($CFG->dirroot . '/totara')) {
-        $ADMIN->add('tool_curlmanager',
-            new admin_externalpage('curlmanager_report',
+        $ADMIN->add(
+            'tool_curlmanager',
+            new admin_externalpage(
+                'curlmanager_report',
                 get_string('curlmanagerreport', 'tool_curlmanager'),
                 new moodle_url('/admin/tool/curlmanager/report.php')
-            ));
+            )
+        );
 
-        $ADMIN->add('tool_curlmanager',
-            new admin_externalpage('curlmanager_domain_report',
+        $ADMIN->add(
+            'tool_curlmanager',
+            new admin_externalpage(
+                'curlmanager_domain_report',
                 get_string('curlmanagerdomainreport', 'tool_curlmanager'),
                 new moodle_url('/admin/tool/curlmanager/domain_report.php')
-            ));
+            )
+        );
     } else {
-        $ADMIN->add('reports',
-            new admin_externalpage('curlmanager_report',
+        $ADMIN->add(
+            'reports',
+            new admin_externalpage(
+                'curlmanager_report',
                 get_string('curlmanagerreport', 'tool_curlmanager'),
                 new moodle_url('/admin/tool/curlmanager/report.php')
-            ));
+            )
+        );
 
-        $ADMIN->add('reports',
-            new admin_externalpage('curlmanager_domain_report',
+        $ADMIN->add(
+            'reports',
+            new admin_externalpage(
+                'curlmanager_domain_report',
                 get_string('curlmanagerdomainreport', 'tool_curlmanager'),
                 new moodle_url('/admin/tool/curlmanager/domain_report.php')
-            ));
+            )
+        );
     }
 }

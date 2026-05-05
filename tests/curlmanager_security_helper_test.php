@@ -38,6 +38,9 @@ final class curlmanager_security_helper_test extends advanced_testcase {
     private function call_getcomponentbycodepath(array $trace) {
         $helper = new curlmanager_security_helper();
         $rm = new \ReflectionMethod(curlmanager_security_helper::class, 'getcomponentbycodepath');
+        if (PHP_VERSION_ID < 80100) {
+            $rm->setAccessible(true);
+        }
         return $rm->invoke($helper, $trace);
     }
 
@@ -83,16 +86,16 @@ final class curlmanager_security_helper_test extends advanced_testcase {
                 // Entry point (last frame, reversed to first in iteration) is tool_curlmanager;
                 // inner frame is tool_task. The outermost (entry point) should be returned.
                 'trace'    => [
-                    ['file' => $dirroot . '/admin/tool/task/classes/task_logger.php'], // inner (index 0)
-                    ['file' => $dirroot . '/admin/tool/curlmanager/lib.php'], // outer (index 1)
+                    ['file' => $dirroot . '/admin/tool/task/classes/task_logger.php'], // Inner (index 0).
+                    ['file' => $dirroot . '/admin/tool/curlmanager/lib.php'], // Outer (index 1).
                 ],
                 'expected' => 'tool_curlmanager',
             ],
             'only core entry point with plugin inner frame returns plugin' => [
                 // Entry point is a core file, but a plugin is found deeper in.
                 'trace'    => [
-                    ['file' => $dirroot . '/admin/tool/curlmanager/classes/curlmanager_security_helper.php'], // inner
-                    ['file' => $dirroot . '/lib/setup.php'], // entry
+                    ['file' => $dirroot . '/admin/tool/curlmanager/classes/curlmanager_security_helper.php'], // Inner.
+                    ['file' => $dirroot . '/lib/setup.php'], // Entry.
                 ],
                 'expected' => 'tool_curlmanager',
             ],
